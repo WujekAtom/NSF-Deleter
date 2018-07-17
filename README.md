@@ -20,16 +20,17 @@ This application first creates a request for each database. Request can be creat
 
 1. Application shows output in Java Debug Console of IBM Notes.
 On Linux you need to apply following changes to java.security files:
-
-
+```
 /opt/ibm/notes/java.policy
 /opt/ibm/notes/jvm/lib/security/java.policy
+```
 
 and add:
-
+```
 grant{
 	permission java.security.AllPermission;
 }
+```
 
 2. Before you start, open Java console: from top menu TOOLS -> SHOW JAVA DEBUG CONSOLE.
 
