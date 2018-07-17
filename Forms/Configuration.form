@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <note class='form' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.10'
  replicaid='C12582CD003E2D74'>
-<noteinfo noteid='166' unid='118896EBBD55B864C12581A100441F5F' sequence='25'>
+<noteinfo noteid='166' unid='118896EBBD55B864C12581A100441F5F' sequence='26'>
 <created><datetime dst='true'>20170920T142404,79+02</datetime></created>
-<modified><datetime dst='true'>20180717T131912,31+02</datetime></modified>
-<revised><datetime dst='true'>20180713T092857,29+02</datetime></revised>
-<lastaccessed><datetime dst='true'>20180717T131912,30+02</datetime></lastaccessed>
+<modified><datetime dst='true'>20180717T145613,32+02</datetime></modified>
+<revised><datetime dst='true'>20180717T145613,31+02</datetime></revised>
+<lastaccessed><datetime dst='true'>20180717T145613,31+02</datetime></lastaccessed>
 <addedtofile><datetime dst='true'>20180717T131912,30+02</datetime></addedtofile></noteinfo>
 <updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
 <wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby>
@@ -70,8 +70,8 @@ AAAAADQWRSg0FgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIYBAAAA
 AFSHAAAAAAAAAAAAAAAAAQAAAAQAAACDBAQAhf8IAAUAAAzdBgAAiv/+/1AAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4AHgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAIr/NACKAAAFADACAAAAAAAAAgUAAAwAAAAAAAAAABAAAAAAAGRlbGV0ZUZyb21TZXJ2
-ZXJiDgEAhAAAAAAAAAAAAN4GAACK/4X/CAAFAAAMgQKDBAQA3QYAAIX/hf8lAAUADghleGFtcGxl
-OiBTVkVIQVBQTDAxL1NSVi9FUENPUwDSCAEAgICAAN4GAACF/6QSAAInKSY8AABVAhERAQEAAIEC
+ZXJiDgEAhAAAAAAAAAAAAN4GAACK/4X/CAAFAAAMgQKDBAQA3QYAAIX/hf8mAAUADghleGFtcGxl
+OiBNeVNlcnZlci9PVS9NeUNvbXBhbnnSCAEAgICAAN4GAACF/6QSAAInKSY8AABVAhERAQEAAIEC
 gv9aAAUAAAAAAAAAAAAzKSY8MykAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAACGAQAAAABUhwAAAAAAAAAAAAAAAAEAAAAEAAAAgwQFAIX/MQAFAAAMRGVsZXRlIGZyb20g
 c2luZ2xlIHNlcnZlciAobm90IGNsdXN0ZXJlZCkAgQKDBAUAhf8IAAUAAAzdBgAAiv/+/1AAAAAA
