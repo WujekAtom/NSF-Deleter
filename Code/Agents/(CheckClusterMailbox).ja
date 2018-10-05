@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='utf-8'?>
+<agent name='(CheckClusterMailbox)' xmlns='http://www.lotus.com/dxl' version='9.0'
+ maintenanceversion='1.10' replicaid='C125831D007B6F4A' hide='v3' publicaccess='false'
+ designerversion='8.5.3'>
+<noteinfo noteid='2a6' unid='3FA19B30E231AEBFC12581A70049BADD' sequence='74'>
+<created><datetime dst='true'>20170926T152519,65+02</datetime></created>
+<modified><datetime dst='true'>20181006T002826,51+02</datetime></modified>
+<revised><datetime dst='true'>20180710T153406,90+02</datetime></revised>
+<lastaccessed><datetime dst='true'>20181006T002826,50+02</datetime></lastaccessed>
+<addedtofile><datetime dst='true'>20181006T002826,50+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
+<wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby>
+<designchange><datetime dst='true'>20180710T153408,01+02</datetime></designchange>
+<trigger type='agentlist'/>
+<documentset type='all'/><code event='action'><javaproject class='JavaAgent.class'
+ codepath='c:\Notes\Data'><java name='JavaAgent.java'>import lotus.domino.*;
+
+public class JavaAgent extends AgentBase {
+
+    public void NotesMain() {
+
+      try {
+          Session session = getSession();
+          AgentContext agentContext = session.getAgentContext();
+
+          // (Your code goes here)
+          checkReplicasOnCluster();
+      }
+      catch(NotesException ne)
+      {
+    	  ne.printStackTrace();
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+       }
+   }
+    
+    
+    /*
+     * Method is checking if databases replicas exist on both servers.
+     * TODO: Implement checking value from configuration to check on what servers checking should be done,
+     * and from which server delete the databases [both n cluster or just one of them] 
+     */
+    public void checkReplicasOnCluster() throws NotesException
+    {
+    	Session session = getSession();
+    	AgentContext agt = session.getAgentContext();
+    	Database db = agt.getCurrentDatabase();
+    	View viewQueue = db.getView("RequestQueue");
+    	Document doc;
+    	Document docTmp = null;
+    	
+    	Document profileDoc = db.getProfileDocument("Configuration", "");
+    	
+    	String mail01srv = profileDoc.getItemValueString("serverReplica1");
+    	String mail02srv = profileDoc.getItemValueString("serverReplica2");
+    	String fileName = profileDoc.getItemValueString("prefix");
+    	
+    	// Flag for deleting or not the DB from replicas servers
+    	String deleteFromCluster1 = profileDoc.getItemValueString("cluster1delete");
+    	String deleteFromCluster2 = profileDoc.getItemValueString("cluster2delete");
+    	
+//    	String mail01srv = "SVEHAPPL01/SRV/EPCOS";
+//    	String mail02srv = "SVEHAPPL02/SRV/EPCOS";
+//    	String fileName = "mail/";
+    	
+    	Database dbMail01;
+    	Database dbMail02;
+    	//String noExist = "NOEXIST";
+    	System.out.println("START");
+    	
+    	// VERY IMPORTANT! If this is true, then after every iteration the view is refreshed
+    	// and the reference to Document is missing. The agent interrupt executing with error
+    	// Null Pointer Exception, at the line with GetNextDocument(doc).
+    	// setAutoUpdate(false)
+    	viewQueue.setAutoUpdate(false);
+    	doc = viewQueue.getFirstDocument();
+    	
+    	while (doc!=null)
+    	{    		
+    		fileName = fileName.concat(doc.getItemValueString("reqEGID")).concat(".nsf");
+    		dbMail01 = session.getDatabase(mail01srv, fileName, false);
+    		dbMail02 = session.getDatabase(mail02srv, fileName, false);
+    		System.out.println(fileName + " === " + dbMail01);
+    		System.out.println(fileName + " === " + dbMail02);
+    		
+
+    		if ((dbMail01 == null) &amp;&amp; (dbMail02 == null))
+    		{
+    			System.out.println("no mailbox");
+    			doc.replaceItemValue("reqMail01", "");
+    			doc.replaceItemValue("reqMail02", "");
+    			doc.replaceItemValue("reqStatus", "NOEXIST");    	
+    			
+    			//dbMail01.recycle();
+    			//dbMail02.recycle();
+    		}
+    			
+    		else   
+    		{
+	    		if (dbMail01!=null)
+	    		{
+	    			doc.replaceItemValue("reqMail01", dbMail01.getFilePath());
+	    			dbMail01.recycle();
+	    		}
+	    		else
+	    		{
+	    			doc.replaceItemValue("reqMail01", "");    			
+	    		}
+	    		
+	    		if (dbMail02!=null)
+	    		{
+	    			doc.replaceItemValue("reqMail02", dbMail02.getFilePath());
+	    			dbMail02.recycle();
+	    		}
+	    		else
+	    		{
+	    			doc.replaceItemValue("reqMail02", "");    			
+	    		}
+    		}
+	
+    	
+    		//System.out.println("przed zapisem");
+    		doc.computeWithForm(false, false);
+    		if (!doc.save())
+        		System.out.println("CAN'T SAVE: " + doc.getItemValueString("reqEGID"));
+    		
+    		//System.out.println("PO zapisie: " + doc.getItemValueString("reqProcess"));
+    		
+    		fileName = "mail/";
+    		docTmp = viewQueue.getNextDocument(doc);
+    		doc.recycle();
+    		doc = docTmp;
+    	}
+    	
+    	System.out.println("END");
+    }
+
+    
+    /*
+     * Old, test method. DO NOT USE.
+     */
+	public void checkReplicasOnCluster2() throws NotesException
+	{
+		Session session = getSession();
+		AgentContext agt = session.getAgentContext();
+		Database db = agt.getCurrentDatabase();
+		View viewQueue = db.getView("RequestQueue");
+		Document doc = null;
+		Document docTmp = null;
+		String mail01srv = "SVEHMAIL01/SRV/EPCOS";
+		String mail02srv = "SVEHMAIL02/SRV/EPCOS";
+		String fileName = "mail/";
+		
+		Database dbMail01;
+		Database dbMail02;
+		
+		System.out.println("START");
+		
+		doc = viewQueue.getFirstDocument();
+		
+		while (doc!=null)
+		{    		
+			fileName = fileName.concat(doc.getItemValueString("reqEGID")).concat(".nsf");
+			dbMail01 = session.getDatabase(mail01srv, fileName, false);
+			
+			System.out.println(fileName + " === " + dbMail01);					
+			
+			fileName = "mail";
+			docTmp = viewQueue.getNextDocument(doc);
+			doc.recycle();
+			doc = docTmp;
+		}
+		
+		System.out.println("END");
+	}
+}</java></javaproject></code>
+<rundata processeddocs='0' exitcode='0'>
+<agentmodified><datetime dst='true'>20180710T153408,04+02</datetime></agentmodified></rundata>
+<item name='$JavaCompilerSource'><text>1.3</text></item>
+<item name='$JavaCompilerTarget'><text>1.2</text></item></agent>
+

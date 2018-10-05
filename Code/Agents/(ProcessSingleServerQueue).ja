@@ -1,0 +1,274 @@
+<?xml version='1.0' encoding='utf-8'?>
+<agent name='(ProcessSingleServerQueue)' xmlns='http://www.lotus.com/dxl'
+ version='9.0' maintenanceversion='1.10' replicaid='C125831D007B6F4A' hide='v3'
+ publicaccess='false' designerversion='8.5.3' restrictions='unrestricted'>
+<noteinfo noteid='45e' unid='0B03ADAF3C1AED43C12582B7004ACC02' sequence='34'>
+<created><datetime dst='true'>20180625T153658,90+02</datetime></created>
+<modified><datetime dst='true'>20181006T002838,70+02</datetime></modified>
+<revised><datetime dst='true'>20180924T134600,97+02</datetime></revised>
+<lastaccessed><datetime dst='true'>20181006T002838,69+02</datetime></lastaccessed>
+<addedtofile><datetime dst='true'>20181006T002838,69+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
+<wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby>
+<designchange><datetime dst='true'>20180924T134601,03+02</datetime></designchange>
+<trigger type='agentlist'/>
+<documentset type='selected'/><code event='action'><javaproject class='JavaAgent.class'
+ codepath='c:\Notes\Data'><java name='JavaAgent.java'>import java.io.NotSerializableException;
+
+import javax.swing.JOptionPane;
+
+import lotus.domino.*;
+
+public class JavaAgent extends AgentBase {
+
+    public void NotesMain() {
+
+      try {
+          Session session = getSession();
+          AgentContext agentContext = session.getAgentContext();
+
+          // (Your code goes here)
+          if (promptWindow())
+        	  processSingleServerRequestsV2();
+          else
+        	  System.out.println("EXIT without processing");
+
+          //promptWindow();
+          
+          //readProfile();
+      }
+      catch(NotesException ne)
+      {
+    	  ne.printStackTrace();
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+       }
+   }
+       
+    public boolean promptWindow()
+    {
+    	int choseOption = JOptionPane.showConfirmDialog(null, "Process all requests and DELETES DBs from server? Are you ready?", "", JOptionPane.YES_NO_OPTION);
+    	if (choseOption == JOptionPane.YES_OPTION)
+    		return true;
+    	else
+    		return false;
+    }
+    /*
+     * YES - process all
+     * NO - process only one selected
+     */
+    public boolean promptProcessAll()
+    {
+    	int choseOption = JOptionPane.showConfirmDialog(null, "YES - process ALL request on view\n NO - process only ONE selected", "", JOptionPane.YES_NO_OPTION);
+    	if (choseOption == JOptionPane.YES_OPTION)
+    		return true;
+    	else
+    		return false;
+    }
+    
+    public void readProfile() throws NotesException
+    {
+    	Session s = getSession();
+    	AgentContext agt = s.getAgentContext();
+    	Database db = agt.getCurrentDatabase();
+    	
+    	Document profileDoc = db.getProfileDocument("Configuration", "");
+    	if (profileDoc.isProfile())
+    	{
+    		System.out.println("Delete from server: " + profileDoc.getItemValueString("deleteFromServer"));
+    		System.out.println("Selected cluster1? " + profileDoc.getItemValueString("cluster1delete"));
+    		System.out.println("Selected cluster1? " + profileDoc.getItemValueString("prefix"));
+    		int deleteCluster1 = Integer.parseInt(profileDoc.getItemValueString("cluster1delete"));
+    		if (deleteCluster1 == 1)
+    			System.out.println("jeden");
+    	}
+    	
+    	else
+    		System.out.println("Not a profile");
+    	
+    }
+    
+
+    public void processSingleServerRequests() throws NotesException
+    {
+    	Session s = getSession();
+    	AgentContext agt = s.getAgentContext();
+    	Database db = agt.getCurrentDatabase();
+    	View view = db.getView("RequestQueue");
+    	Document profileDoc = db.getProfileDocument("Configuration", "");
+    	
+    	view.setAutoUpdate(false);
+    	
+    	String singleServer = profileDoc.getItemValueString("deleteFromServer");
+    	String prefix = profileDoc.getItemValueString("prefix");
+    	
+    	// Reads the states of checkboxes: 0 or 1
+    	//int deleteCluster1 = Integer.parseInt(profileDoc.getItemValueString("cluster1delete"));
+   
+    	String reqStatus = "";
+    	String filePath = "";
+    	Database dbMail = null;
+    	Document docTmp = null;
+    	Document doc = view.getFirstDocument();
+    	
+    	System.out.println("START");
+
+	    	while (doc!=null)
+	    	{	    		
+	    		reqStatus = doc.getItemValueString("reqStatus");
+	    		filePath = prefix.concat(doc.getItemValueString("reqEGID")).concat(".nsf");	    	   
+	    		
+	    		if ((reqStatus.contains("Queue")))
+	    		{
+	    			// request will be process...
+	    			dbMail =  s.getDatabase(singleServer, filePath, false);
+    				if (dbMail!=null)
+    				{
+    					try
+        				{
+        					dbMail.remove();
+        				}
+        				catch(NotesException ne)
+        				{
+        					System.out.println("Cant delete!");
+        					doc.replaceItemValue("reqProcess", "NO");
+        				}
+    				
+						dbMail.recycle();
+						System.out.println("DB deleted: " + doc.getItemValueString("reqEGID"));
+		
+	    				doc.replaceItemValue("reqStatus", "DONE");
+	    				doc.computeWithForm(false, false);
+	    				doc.save();
+    				}
+    				else
+    				{
+    					System.out.println("CANNOT delete: " + doc.getItemValueString("reqEGID") + " , probably file does not exist!");
+    					doc.replaceItemValue("reqStatus", "NOEXIST");
+	    				doc.computeWithForm(false, false);
+	    				doc.save();
+    				}
+    				
+	    		}
+
+	    		docTmp = view.getNextDocument(doc);
+	    		doc.recycle();
+	    		doc = docTmp;
+	    	}
+	    	System.out.println("END");
+    	
+    }    
+    
+    public void processSingleServerRequestsV2() throws NotesException
+    {
+    	Session s = getSession();
+    	AgentContext agt = s.getAgentContext();
+    	Database db = agt.getCurrentDatabase();
+    	DocumentCollection dc = agt.getUnprocessedDocuments();
+    	View v = db.getView("RequestQueue");
+    	ViewEntryCollection vec = v.getAllEntries();
+    	ViewEntry ventry = null;
+    	ViewEntry ventryTmp = null;
+    	DocumentCollection dc2 = null;
+    	Document doc = null;
+    	Document docTmp = null;
+    	boolean processAll = false;
+    	String reqStatus = "";
+    	String filePath = "";
+    	Database dbMail = null;
+    	
+    	v.setAutoUpdate(false);
+    	
+    	Document profileDoc = db.getProfileDocument("Configuration", "");
+    	String singleServer = profileDoc.getItemValueString("deleteFromServer");
+    	String prefix = profileDoc.getItemValueString("prefix");
+    	
+    	System.out.println("START");
+    	
+    	// Asking user if process all request, because no one was selected
+    	// or process only one with the focus on it
+    	if (dc.getCount() == 1)
+    		processAll = promptProcessAll();
+    	
+    	if (processAll)
+    	{
+    		// TRUE - process all request from the view
+    		
+    		// Tricky way to remove all documents from the collections [list].
+    		// Subtract - deletes documents of one collection from the other
+    		// dc2 takes allunprocesseddoc, the same as dc. So both dc and dc2 contains the same elements
+    		dc2 = agt.getUnprocessedDocuments();
+    		dc.subtract(dc2);	// deleting elements of dc2 collection from dc collection
+    		
+    		// Iterating throught the ViewEntryCollections, retrieve each document and it to empty dc
+    		ventry = vec.getFirstEntry();    		
+    		while (ventry!=null)
+    		{
+    			dc.addDocument(ventry.getDocument());
+    			
+    			ventryTmp = vec.getNextEntry(ventry);
+    			ventry.recycle();
+    			ventry = ventryTmp;
+    		}    		
+    	}    	
+    	
+    	doc = dc.getFirstDocument();
+
+    	while (doc!=null)
+    	{	    		
+    		reqStatus = doc.getItemValueString("reqStatus");
+    		filePath = prefix.concat(doc.getItemValueString("reqEGID")).concat(".nsf");	    	   
+    		
+    		if ((reqStatus.contains("Queue")))
+    		{
+    			// request will be process...
+    			dbMail =  s.getDatabase(singleServer, filePath, false);
+				if (dbMail!=null)
+				{
+					try
+    				{
+    					dbMail.remove();
+    				}
+    				catch(NotesException ne)
+    				{
+    					System.out.println("Cant delete!");
+    					doc.replaceItemValue("reqProcess", "NO");
+    				}
+				
+					dbMail.recycle();
+					System.out.println("DB deleted: " + doc.getItemValueString("reqEGID"));
+	
+    				doc.replaceItemValue("reqStatus", "DONE");
+    				doc.computeWithForm(false, false);
+    				doc.save();
+				}
+				else
+				{
+					System.out.println("CANNOT delete: " + doc.getItemValueString("reqEGID") + " , probably file does not exist!");
+					doc.replaceItemValue("reqStatus", "NOEXIST");
+    				doc.computeWithForm(false, false);
+    				doc.save();
+				}
+				
+    		}
+
+    		docTmp = dc.getNextDocument(doc);
+    		doc.recycle();
+    		doc = docTmp;
+    	}
+    	System.out.println("END");
+    }
+}</java></javaproject></code>
+<rundata processeddocs='0' exitcode='0' agentdata='A50415BA7343127BC12583120040BD19'>
+<agentmodified><datetime dst='true'>20180924T134600,99+02</datetime></agentmodified>
+<agentrun><datetime dst='true'>20181003T104659,03+02</datetime></agentrun>
+<runlog>Started running agent 'ProcessSingleServerQueue' on 2018-10-03 10:22:45
+Running on selected documents: 1499 total
+Found 1499 document(s) that match search criteria
+Ran Java Agent Class
+Done running agent 'ProcessSingleServerQueue' on 2018-10-03 10:46:59
+</runlog></rundata>
+<item name='$JavaCompilerSource'><text>1.5</text></item>
+<item name='$JavaCompilerTarget'><text>1.5</text></item></agent>
+

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<outline name='MenuOutline' xmlns='http://www.lotus.com/dxl' version='9.0'
+ maintenanceversion='1.10' replicaid='C125831D007B6F4A' publicaccess='false'
+ designerversion='8.5.3'>
+<noteinfo noteid='15e' unid='9EFD33FA86F1788CC12581A100419A67' sequence='18'>
+<created><datetime dst='true'>20170920T135633,67+02</datetime></created>
+<modified><datetime dst='true'>20181006T002818,15+02</datetime></modified>
+<revised><datetime dst='true'>20180625T101012,77+02</datetime></revised>
+<lastaccessed><datetime dst='true'>20181006T002818,14+02</datetime></lastaccessed>
+<addedtofile><datetime dst='true'>20181006T002818,14+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
+<outlineentry label='Request queue' type='namedelementlink' displayimage='false'><namedelementlink
+ type='view' name='RequestQueue'/></outlineentry>
+<outlineentry label='Done' type='namedelementlink' displayimage='false'><namedelementlink
+ type='view' name='RequestDone'/></outlineentry>
+<outlineentry label='Configuration' type='action' displayimage='false'><code
+ event='value'><formula>@Command([EditProfileDocument]; "Configuration")</formula></code></outlineentry></outline>
+

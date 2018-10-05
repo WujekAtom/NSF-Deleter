@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='utf-8'?>
+<form name='Request' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.10'
+ replicaid='C125831D007B6F4A' publicaccess='false' designerversion='8.5.3'
+ renderpassthrough='true'>
+<noteinfo noteid='14e' unid='953C548C16BF2FFDC12581A0002C562A' sequence='4'>
+<created><datetime dst='true'>20170919T100416,42+02</datetime></created>
+<modified><datetime dst='true'>20181006T002817,76+02</datetime></modified>
+<revised><datetime dst='true'>20170927T221148,91+02</datetime></revised>
+<lastaccessed><datetime dst='true'>20181006T002817,75+02</datetime></lastaccessed>
+<addedtofile><datetime dst='true'>20181006T002817,75+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
+<wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby>
+<body><richtext>
+<pardef id='1'/>
+<par def='1'/>
+<par def='1'><run><font size='19pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20' color='blue'/>REQUEST TO DELETE MAILBOX </run><run><font size='19pt'
+ color='blue' name='Arial' pitch='variable' truetype='true' familyid='20'/><field
+ type='text' kind='computedfordisplay' name='dspEGID'><code event='defaultvalue'><formula
+>reqEGID</formula></code></field></run><compositedata type='98' prevtype='65418'
+ nexttype='222' afterparcount='9' containertype='65418' aftercontainercount='1'
+ afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='19pt' name='Arial' pitch='variable'
+ truetype='true' familyid='20' color='blue'/></run></par>
+<par def='1'/>
+<par def='1'/>
+<table cellbordercolor='silver' widthtype='fixedleft' rowspacing='0.0785in'
+ columnspacing='0.0792in' refwidth='5.1736in'><tablecolumn width='2.4618in'/><tablecolumn
+ width='2.3951in'/>
+<tablerow>
+<tablecell valign='center'>
+<pardef id='3' keepwithnext='true' keeptogether='true'/>
+<par def='3'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/>Full Name</run></par></tablecell>
+<tablecell valign='center'>
+<pardef id='4' keepwithnext='true' keeptogether='true'/>
+<par def='4'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/></run><run
+><font name='Arial' pitch='variable' truetype='true' familyid='20'/><field
+ showdelimiters='false' type='text' kind='editable' name='reqFullName'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='8' containertype='65418'
+ aftercontainercount='1' afterbegincount='4'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font name='Arial'
+ pitch='variable' truetype='true' familyid='20'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell valign='center'>
+<par def='3'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/>EGID</run></par></tablecell>
+<tablecell valign='center'>
+<par def='4'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/><field
+ showdelimiters='false' type='text' kind='editable' name='reqEGID'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='4'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font name='Arial'
+ pitch='variable' truetype='true' familyid='20'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell valign='center'>
+<par def='3'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/>Mail server</run></par></tablecell>
+<tablecell valign='center'>
+<par def='4'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/></run><run
+><font name='Arial' pitch='variable' truetype='true' familyid='20'/><field
+ showdelimiters='false' type='text' kind='editable' name='reqMailServer'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='4'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font name='Arial'
+ pitch='variable' truetype='true' familyid='20'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell valign='center'>
+<par def='3'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/>Replica on Mail 01</run></par></tablecell>
+<tablecell valign='center'>
+<par def='4'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/></run><run
+><font name='Arial' pitch='variable' truetype='true' familyid='20'/><field
+ showdelimiters='false' type='text' kind='editable' name='reqMail01'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='4'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font name='Arial'
+ pitch='variable' truetype='true' familyid='20'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell valign='center'>
+<par def='3'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/>Replica on Mail 02</run></par></tablecell>
+<tablecell valign='center'>
+<par def='4'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/><field
+ showdelimiters='false' type='text' kind='editable' name='reqMail02'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='4'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata></par></tablecell></tablerow>
+<tablerow>
+<tablecell valign='center'>
+<par def='3'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/>Department</run></par></tablecell>
+<tablecell valign='center'>
+<par def='4'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/></run><run
+><font name='Arial' pitch='variable' truetype='true' familyid='20'/><field
+ showdelimiters='false' type='text' kind='editable' name='reqDep'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='4'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font name='Arial'
+ pitch='variable' truetype='true' familyid='20'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell valign='center'>
+<par def='3'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/>Status</run></par></tablecell>
+<tablecell valign='center'>
+<par def='4'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/></run><run
+><font name='Arial' pitch='variable' truetype='true' familyid='20'/><field
+ showdelimiters='false' type='text' kind='editable' name='reqStatus'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='4'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font name='Arial'
+ pitch='variable' truetype='true' familyid='20'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell valign='center'>
+<par def='3'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/></run></par></tablecell>
+<tablecell valign='center'>
+<par def='4'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell valign='center'>
+<par def='3'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/>Processing request?</run></par></tablecell>
+<tablecell valign='center'>
+<par def='4'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/></run><run
+><font name='Arial' pitch='variable' truetype='true' familyid='20'/><field
+ showdelimiters='false' borderstyle='none' lookupeachchar='false' lookupaddressonrefresh='false'
+ type='keyword' allowmultivalues='true' kind='editable' name='reqProcess'
+ listinputseparators='comma' listdisplayseparator='comma'><keywords helperbutton='false'
+ columns='1' ui='checkbox'><textlist><text>NO</text></textlist></keywords></field></run><run
+><font name='Arial' pitch='variable' truetype='true' familyid='20'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell valign='center'>
+<par def='3'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/></run></par></tablecell>
+<tablecell valign='center'>
+<par def='4'><run><font name='Arial' pitch='variable' truetype='true' familyid='20'/></run></par></tablecell></tablerow></table>
+<par def='1'/></richtext></body>
+<item name='$$ScriptName' summary='false' sign='true'><text>Request</text></item></form>
+

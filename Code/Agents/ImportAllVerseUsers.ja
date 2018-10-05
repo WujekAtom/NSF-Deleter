@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='utf-8'?>
+<agent name='ImportAllVerseUsers' xmlns='http://www.lotus.com/dxl' version='9.0'
+ maintenanceversion='1.10' replicaid='C125831D007B6F4A' hide='v3' publicaccess='false'
+ designerversion='8.5.3' restrictions='unrestricted'>
+<noteinfo noteid='3e6' unid='F8DE3DC52EEFEB91C125820A00442C14' sequence='7'>
+<created><datetime>20180103T132437,32+01</datetime></created>
+<modified><datetime dst='true'>20181006T002835,34+02</datetime></modified>
+<revised><datetime>20180103T134433,70+01</datetime></revised>
+<lastaccessed><datetime dst='true'>20181006T002835,33+02</datetime></lastaccessed>
+<addedtofile><datetime dst='true'>20181006T002835,33+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
+<wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby>
+<designchange><datetime>20180103T134442,69+01</datetime></designchange>
+<trigger type='actionsmenu'/>
+<documentset type='runonce'/><code event='action'><javaproject class='JavaAgent.class'
+ codepath='c:\Notes\Data'><java name='JavaAgent.java'>import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+
+import lotus.domino.*;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+
+
+public class JavaAgent extends AgentBase {
+
+	//public ThreadLocal sessThread = new ThreadLocal();
+   
+	public void NotesMain() {
+
+      try {
+
+          Session session = getSession();
+          AgentContext agentContext = session.getAgentContext();
+
+          // (Your code goes here)
+          
+          int dialogResult = JOptionPane.showConfirmDialog(null, "You are going to import ALL users from  DominoDirectory. Are you sure?");
+          if(dialogResult == JOptionPane.YES_OPTION){
+            // Saving code here
+        	  searchInNAB();
+          }
+          
+
+      }
+      catch(NotesException ne)
+      {
+    	  ne.printStackTrace();
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+       }
+     
+   }
+    
+
+    public void createRequest(Document personDoc) throws NotesException
+    {
+    	Session s = getSession();
+    	AgentContext agt = s.getAgentContext();
+    	Database dbCurr = agt.getCurrentDatabase();
+    	String srv = dbCurr.getServer();	//Server name where this app is
+    	
+    	Document doc = dbCurr.createDocument();
+    	
+    	//Mapping fields from PersonDoc to Request
+    	
+    	doc.appendItemValue("Form", "Request");
+    	doc.appendItemValue("reqStatus", "Queue");
+    	
+    	doc.appendItemValue("reqDep", personDoc.getItemValueString("OfficeCountry"));
+    	doc.appendItemValue("reqEGID", personDoc.getItemValueString("EmployeeID"));
+    	doc.appendItemValue("reqFullName", personDoc.getItemValueString("FullName"));
+    	doc.appendItemValue("reqMailServer", personDoc.getItemValueString("MailServer"));
+    	
+    	doc.appendItemValue("reqMail01", "");
+    	doc.appendItemValue("reqMail02", "");
+    	doc.appendItemValue("reqProcess", "");    	
+    	
+    	doc.computeWithForm(false, false);
+    	
+    	if (!doc.save())
+    		System.out.println("CAN'T SAVE: " + personDoc.getItemValueString("EmployeeID"));
+    	else
+    		System.out.println("SAVED: " + personDoc.getItemValueString("EmployeeID"));
+
+    }
+    
+    public void searchInNAB() throws NotesException
+    {
+    	
+    	Session s = getSession();
+    	AgentContext agt = s.getAgentContext();
+    	Database dbCurr = agt.getCurrentDatabase();
+    	String srv = dbCurr.getServer();	//Server name where this app is
+    	View requestsView = dbCurr.getView("RequestQueue");
+    	
+    	System.out.println(srv);
+    	
+    	Document doc = null;
+    	Document docTmp = null;
+    	Database dbNAB = s.getDatabase(srv, "names.nsf");
+    	System.out.println(dbNAB.getFileName());
+    	View vPeople = dbNAB.getView("(PeopleByServer)");
+    	
+    	DocumentCollection dc = vPeople.getAllDocumentsByKey("MAIL");    	
+    	System.out.println(dc.getCount());
+    	
+    	doc = dc.getFirstDocument();
+    	
+    	while (doc!=null)
+    	{
+    		createRequest(doc);
+    		
+    		docTmp = dc.getNextDocument(doc);
+    		doc.recycle();
+    		doc = docTmp;
+    	}
+    	System.out.println("END");
+    }
+    
+   
+}
+
+
+
+
+
+
+
+
+
+</java></javaproject></code>
+<rundata processeddocs='0' exitcode='0' agentdata='F7C9E1D82F51ACC9C125820A0046210E'>
+<agentmodified><datetime>20180103T134433,72+01</datetime></agentmodified>
+<agentrun><datetime>20180104T132706,33+01</datetime></agentrun>
+<runlog>Started running agent 'ImportAllVerseUsers' on 2018-01-04 13:02:21
+Ran Java Agent Class
+Done running agent 'ImportAllVerseUsers' on 2018-01-04 13:27:06
+</runlog></rundata>
+<item name='$JavaCompilerSource'><text>1.3</text></item>
+<item name='$JavaCompilerTarget'><text>1.2</text></item></agent>
+

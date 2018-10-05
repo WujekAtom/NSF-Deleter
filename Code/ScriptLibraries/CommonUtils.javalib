@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<scriptlibrary name='CommonUtils' xmlns='http://www.lotus.com/dxl' version='9.0'
+ maintenanceversion='1.10' replicaid='C125831D007B6F4A' hide='v3 v4strict'
+ designerversion='8.5.3'>
+<noteinfo noteid='476' unid='5108ECF17B32CACFC12582C9002972E5' sequence='1'>
+<created><datetime dst='true'>20180713T093243,89+02</datetime></created>
+<modified><datetime dst='true'>20181006T002839,39+02</datetime></modified>
+<revised><datetime dst='true'>20180713T093244,06+02</datetime></revised>
+<lastaccessed><datetime dst='true'>20181006T002839,38+02</datetime></lastaccessed>
+<addedtofile><datetime dst='true'>20181006T002839,38+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
+<wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby><code
+ event='library'><javaproject/></code></scriptlibrary>
+
