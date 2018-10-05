@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
+<<<<<<< HEAD
 <view xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.10'
  replicaid='C125831D007B6F4A' showinmenu='true' publicaccess='false' default='true'
  noviewformat='true'>
@@ -11,4 +12,20 @@
 <updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby><code
  event='selection'><formula>SELECT @All</formula></code>
 <item name='$FormulaClass'><text>1</text></item></view>
+=======
+<note default='true' class='view' xmlns='http://www.lotus.com/dxl' version='9.0'
+ maintenanceversion='1.10' replicaid='C12582CD003E2D74'>
+<noteinfo noteid='122' unid='69C712955C82E8D7C12581A0002C36DB' sequence='1'>
+<created><datetime dst='true'>20170919T100256,27+02</datetime></created>
+<modified><datetime dst='true'>20180717T131910,16+02</datetime></modified>
+<revised><datetime dst='true'>20170919T100256,29+02</datetime></revised>
+<lastaccessed><datetime dst='true'>20180717T131910,15+02</datetime></lastaccessed>
+<addedtofile><datetime dst='true'>20180717T131910,15+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
+<item name='$TITLE'><text/></item>
+<item name='$Formula' summary='true'><formula compiled='true'>
+HAAFAA4ACgABAAQAJCQkJAQABAAAAAgAZgADAA==
+</formula></item>
+<item name='$FormulaClass'><text>1</text></item></note>
+>>>>>>> 6484f1daf58b719c0503e1f0661e915e98e1b8ec
 

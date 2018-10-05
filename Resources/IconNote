@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <note default='true' class='icon' xmlns='http://www.lotus.com/dxl' version='9.0'
+<<<<<<< HEAD
  maintenanceversion='1.10' replicaid='C125831D007B6F4A'>
 <noteinfo noteid='126' unid='1EAF0D5C3D45F9C7C12581A0002C36E3' sequence='7'>
 <created><datetime dst='true'>20170919T100256,35+02</datetime></created>
@@ -7,6 +8,15 @@
 <revised><datetime dst='true'>20181006T002841,33+02</datetime></revised>
 <lastaccessed><datetime dst='true'>20181006T002841,33+02</datetime></lastaccessed>
 <addedtofile><datetime dst='true'>20181006T002816,80+02</datetime></addedtofile></noteinfo>
+=======
+ maintenanceversion='1.10' replicaid='C12582CD003E2D74'>
+<noteinfo noteid='126' unid='1EAF0D5C3D45F9C7C12581A0002C36E3' sequence='7'>
+<created><datetime dst='true'>20170919T100256,35+02</datetime></created>
+<modified><datetime dst='true'>20180717T131938,93+02</datetime></modified>
+<revised><datetime dst='true'>20180717T131938,92+02</datetime></revised>
+<lastaccessed><datetime dst='true'>20180717T131938,92+02</datetime></lastaccessed>
+<addedtofile><datetime dst='true'>20180717T131910,26+02</datetime></addedtofile></noteinfo>
+>>>>>>> 6484f1daf58b719c0503e1f0661e915e98e1b8ec
 <updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
 <item name='IconBitmap' summary='true'>
 <rawitemdata type='6'>
@@ -32,5 +42,9 @@ AAAAUEECICABAAD/////+A4DgA==
 <item name='$LargeSummary'><text>0</text></item>
 <item name='$Flags'><text>J47F</text></item>
 <item name='$Daos'><text>0</text></item>
+<<<<<<< HEAD
 <item name='$TITLE'><text>NSF Deleter</text></item></note>
+=======
+<item name='$TITLE'><text>Delete Migrated Mailboxes</text></item></note>
+>>>>>>> 6484f1daf58b719c0503e1f0661e915e98e1b8ec
 
