@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='utf-8'?>
+<form name='Configuration' xmlns='http://www.lotus.com/dxl' version='9.0'
+ maintenanceversion='1.10' replicaid='C125831F006578AA' nocompose='true' publicaccess='false'
+ designerversion='8.5.3' renderpassthrough='true'>
+<noteinfo noteid='166' unid='118896EBBD55B864C12581A100441F5F' sequence='25'>
+<created><datetime dst='true'>20170920T142404,79+02</datetime></created>
+<modified><datetime dst='true'>20181007T202829,44+02</datetime></modified>
+<revised><datetime dst='true'>20180713T092857,29+02</datetime></revised>
+<lastaccessed><datetime dst='true'>20181007T202829,43+02</datetime></lastaccessed>
+<addedtofile><datetime dst='true'>20181007T202829,43+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
+<wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby><code
+ event='windowtitle'><formula>"Configuration"</formula></code>
+<body><richtext>
+<pardef id='1'/>
+<par def='1'/>
+<par def='1'><run><font size='19pt'/>CONFIGURATION</run></par>
+<par def='1'><run><font size='12pt'/></run></par>
+<par def='1'><run><font size='12pt'/></run></par>
+<table cellbordercolor='silver' widthtype='fixedleft' rowspacing='0.0785in'
+ columnspacing='0.0785in' refwidth='9.7715in'><tablecolumn width='2.7035in'/><tablecolumn
+ width='3.2201in'/><tablecolumn width='3.3771in'/>
+<tablerow>
+<tablecell valign='center'>
+<pardef id='3' keepwithnext='true' keeptogether='true'/>
+<par def='3'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/>Delete databases from server:</run></par></tablecell>
+<tablecell valign='center'>
+<pardef id='4' keepwithnext='true' keeptogether='true'/>
+<par def='4'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/></run><run><font size='12pt' name='Arial' pitch='variable'
+ truetype='true' familyid='20'/><field type='text' kind='editable' name='deleteFromServer'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='7' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='12pt'
+ name='Arial' pitch='variable' truetype='true' familyid='20'/></run></par>
+<par def='4'><run><font size='8pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20' color='gray'/>example: SVEHAPPL01/SRV/EPCOS</run></par></tablecell>
+<tablecell>
+<pardef id='5' keepwithnext='true' keeptogether='true'/>
+<par def='5'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/>Delete from single server (not clustered)</run></par>
+<par def='5'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/></run><run><font size='12pt' name='Arial' pitch='variable'
+ truetype='true' familyid='20'/><field borderstyle='none' lookupeachchar='false'
+ lookupaddressonrefresh='false' type='keyword' kind='editable' name='singleServerDelete'><keywords
+ helperbutton='false' columns='1' ui='radiobutton'><textlist><text>YES | 1</text><text
+>NO | 0</text></textlist></keywords><code event='defaultvalue'><formula>"0"</formula></code></field></run><run
+><font size='12pt' name='Arial' pitch='variable' truetype='true' familyid='20'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell valign='center'>
+<par def='3'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/>Check if database exist on server1:</run></par></tablecell>
+<tablecell valign='center'>
+<par def='4'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/></run><run><font size='12pt' name='Arial' pitch='variable'
+ truetype='true' familyid='20'/><field type='text' kind='editable' name='serverReplica1'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='6' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='12pt'
+ name='Arial' pitch='variable' truetype='true' familyid='20'/></run></par></tablecell>
+<tablecell>
+<par def='5'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/>Delete from cluster1</run></par>
+<par def='5'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/></run><run><font size='12pt' name='Arial' pitch='variable'
+ truetype='true' familyid='20'/><field borderstyle='none' lookupeachchar='false'
+ lookupaddressonrefresh='false' type='keyword' kind='editable' name='cluster1delete'><keywords
+ helperbutton='false' columns='1' ui='radiobutton'><textlist><text>YES | 1</text><text
+>NO | 0</text></textlist></keywords><code event='defaultvalue'><formula>"1"</formula></code></field></run><run
+><font size='12pt' name='Arial' pitch='variable' truetype='true' familyid='20'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell valign='center'>
+<par def='3'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/>Check if database exist on server2:</run></par></tablecell>
+<tablecell valign='center'>
+<par def='4'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/></run><run><font size='12pt' name='Arial' pitch='variable'
+ truetype='true' familyid='20'/><field type='text' kind='editable' name='serverReplica2'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='6' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='12pt'
+ name='Arial' pitch='variable' truetype='true' familyid='20'/></run></par></tablecell>
+<tablecell>
+<par def='5'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/>Delete from cluster2</run></par>
+<par def='5'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/></run><run><font size='12pt' name='Arial' pitch='variable'
+ truetype='true' familyid='20'/><field borderstyle='none' lookupeachchar='false'
+ lookupaddressonrefresh='false' type='keyword' kind='editable' name='cluster2delete'><keywords
+ helperbutton='false' columns='1' ui='radiobutton'><textlist><text>YES | 1</text><text
+>NO | 0</text></textlist></keywords><code event='defaultvalue'><formula>"1"</formula></code></field></run><run
+><font size='12pt' name='Arial' pitch='variable' truetype='true' familyid='20'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell>
+<par def='3'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/>Prefix for mailboxes (path)</run></par>
+<par def='3'><run><font size='9pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20' color='gray'/>for example: </run></par>
+<par def='3'><run><font size='9pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20' color='gray'/>mail/</run></par>
+<par def='3'><run><font size='9pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20' color='gray'/>archive/</run></par>
+<par def='3'><run><font size='9pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20' color='gray'/>folder/</run></par></tablecell>
+<tablecell>
+<par def='4'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/></run><run><font size='12pt' name='Arial' pitch='variable'
+ truetype='true' familyid='20'/><field type='text' kind='editable' name='prefix'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='6' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='12pt'
+ name='Arial' pitch='variable' truetype='true' familyid='20'/></run></par></tablecell>
+<tablecell>
+<par def='5'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/></run></par></tablecell></tablerow>
+<tablerow>
+<tablecell>
+<par def='3'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/>Mail server to EXCLUDE</run></par>
+<par def='3'><run><font size='9pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20' color='gray'/>Person docs contains this server will not be processed</run></par></tablecell>
+<tablecell>
+<par def='4'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/></run><run><font size='12pt' name='Arial' pitch='variable'
+ truetype='true' familyid='20'/><field type='text' kind='editable' name='excludeServer'/></run><compositedata
+ type='98' prevtype='65418' nexttype='222' afterparcount='6' containertype='65418'
+ aftercontainercount='1' afterbegincount='3'>
+Yg4BAIQAAAAAAAAAAAA=
+</compositedata><run><font size='12pt'
+ name='Arial' pitch='variable' truetype='true' familyid='20'/></run></par></tablecell>
+<tablecell>
+<par def='5'><run><font size='12pt' name='Arial' pitch='variable' truetype='true'
+ familyid='20'/></run></par></tablecell></tablerow></table>
+<par def='1'><run><font size='12pt'/></run></par></richtext></body>
+<item name='$$ScriptName' summary='false' sign='true'><text>Configuration</text></item></form>
+

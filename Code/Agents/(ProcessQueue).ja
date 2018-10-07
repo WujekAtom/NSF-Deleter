@@ -1,0 +1,320 @@
+<?xml version='1.0' encoding='utf-8'?>
+<agent name='(ProcessQueue)' xmlns='http://www.lotus.com/dxl' version='9.0'
+ maintenanceversion='1.10' replicaid='C125831F006578AA' hide='v3' publicaccess='false'
+ designerversion='8.5.3' restrictions='unrestricted'>
+<noteinfo noteid='296' unid='BAC394E73AB91905C12581A7004998D5' sequence='63'>
+<created><datetime dst='true'>20170926T152352,53+02</datetime></created>
+<modified><datetime dst='true'>20181007T202841,45+02</datetime></modified>
+<revised><datetime dst='true'>20180713T093100,30+02</datetime></revised>
+<lastaccessed><datetime dst='true'>20181007T202841,44+02</datetime></lastaccessed>
+<addedtofile><datetime dst='true'>20181007T202841,44+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
+<wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby>
+<designchange><datetime dst='true'>20180713T093104,34+02</datetime></designchange>
+<trigger type='agentlist'/>
+<documentset type='all'/><code event='action'><javaproject class='JavaAgent.class'
+ codepath='c:\Notes\Data'><java name='JavaAgent.java'>import java.io.NotSerializableException;
+
+import lotus.domino.*;
+
+public class JavaAgent extends AgentBase {
+
+    public void NotesMain() {
+
+      try {
+          Session session = getSession();
+          AgentContext agentContext = session.getAgentContext();
+
+          // (Your code goes here)
+          //singleDelete();
+          processRequests();
+          //processSingleServerRequests();
+         //testProcess();
+          
+          //readProfile();
+      }
+      catch(NotesException ne)
+      {
+    	  ne.printStackTrace();
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+       }
+   }
+    
+    /*
+     * TEST one single deletion
+     */
+    public void singleDelete() throws NotesException
+    {
+    	Session s = getSession();
+    	AgentContext agt = s.getAgentContext();
+    	Database db = agt.getCurrentDatabase();
+    	View view = db.getView("RequestQueue");
+    	
+    	String mail01srv = "SVEHMAIL01/SRV/EPCOS";
+    	String mail02srv = "SVEHMAIL02/SRV/EPCOS";
+    	
+    	Document docTmp = null;
+    	Document doc = view.getFirstDocument();
+    	
+    	Database dbMail01 = s.getDatabase(mail01srv, doc.getItemValueString("reqMail01"), false);
+    	Database dbMail02 = s.getDatabase(mail02srv, doc.getItemValueString("reqMail02"), false);
+    	
+    	System.out.println(doc.getItemValueString("reqFullName"));
+    	dbMail01.remove();
+    	dbMail02.remove();
+    	
+    	dbMail01.recycle();
+    	dbMail02.recycle();
+    	
+    	doc.recycle();
+    }
+    
+    /*
+     * TEST method for reading database's profile document
+     */
+    public Document readProfile() throws NotesException
+    {
+    	Session s = getSession();
+    	AgentContext agt = s.getAgentContext();
+    	Database db = agt.getCurrentDatabase();
+    	
+    	Document profileDoc = db.getProfileDocument("Configuration", "");
+    	if (profileDoc.isProfile())
+    	{
+//    		System.out.println("Delete from server: " + profileDoc.getItemValueString("deleteFromServer"));
+//    		System.out.println("Selected cluster1? " + profileDoc.getItemValueString("cluster1delete"));
+//    		System.out.println("Selected cluster1? " + profileDoc.getItemValueString("prefix"));
+//    		int deleteCluster1 = Integer.parseInt(profileDoc.getItemValueString("cluster1delete"));
+//    		if (deleteCluster1 == 1)
+//    			System.out.println("jeden");
+    		return profileDoc;
+    	}
+    	
+    	else
+    		return null;
+    	
+    }
+    
+    
+    /*
+     * Method check all requests document. it check if doc is in QUEUE state and if it is not selected to NOT PROCESS
+     * 
+     */
+    
+    public void processRequests() throws NotesException
+    {
+    	Session s = getSession();
+    	AgentContext agt = s.getAgentContext();
+    	Database db = agt.getCurrentDatabase();
+    	View view = db.getView("RequestQueue");
+    	Document profileDoc = db.getProfileDocument("Configuration", "");
+    	/*
+    	 * VERY IMPORTANT!
+    	 * setAutoUpdate = false
+    	 * When TRUE then view updates on every iteration and reference to Document is missing.
+    	 * Agent interrupt its executing with error: NullPoinerException, in line getNextDocument(doc)
+    	 */
+    	view.setAutoUpdate(false);
+    	
+    	String mail01srv = profileDoc.getItemValueString("serverReplica1");
+    	String mail02srv = profileDoc.getItemValueString("serverReplica2");
+    	String singleServer = profileDoc.getItemValueString("deleteFromServer");
+    	
+    	// Reads the states of checkboxes: 0 or 1
+    	int deleteCluster1 = Integer.parseInt(profileDoc.getItemValueString("cluster1delete"));
+    	int deleteCluster2 = Integer.parseInt(profileDoc.getItemValueString("cluster2delete"));
+    	int deleteSingleServer = Integer.parseInt(profileDoc.getItemValueString("deleteFromServer"));
+    	
+//     	String mail01srv = "SVEHAPPL01/SRV/EPCOS";
+//    	String mail02srv = "SVEHAPPL02/SRV/EPCOS";
+    	
+    	Document docTmp = null;
+    	Document doc = view.getFirstDocument();
+    	
+    	String reqStatus = "";
+    	String reqStatusOption ="";
+    	String fileMail01 = "";
+    	String fileMail02 = "";
+    	Database dbMail01 = null;
+    	Database dbMail02 = null;
+    	
+    	System.out.println("START");
+
+	    	while (doc!=null)
+	    	{
+	    		
+	    		reqStatus = doc.getItemValueString("reqStatus");
+	    		reqStatusOption = doc.getItemValueString("reqProcess");
+	    		fileMail01 = doc.getItemValueString("reqMail01");
+	    		fileMail02 = doc.getItemValueString("reqMail02");
+	    		
+	    		
+	    		if ((reqStatus.contains("Queue")))
+	    		{
+	    			// request will be process...
+	    			
+	    			if (!fileMail01.isEmpty())
+	    			{
+	    				// file exist on server M1
+	    				dbMail01 =  s.getDatabase(mail01srv, fileMail01, false);
+	    				try
+	    				{
+	    					dbMail01.remove();
+	    				}
+	    				catch(NotesException ne)
+	    				{
+	    					System.out.println("Cant delete!");
+	    					doc.replaceItemValue("reqProcess", "NO");
+	    				}
+	    				
+						dbMail01.recycle();
+						System.out.println("M1, deleted " + doc.getItemValueString("reqEGID"));
+	    				
+	    				
+	    						
+	    				if (!fileMail02.isEmpty())
+	    				{
+	    					// file exist on M2
+	    					dbMail02 =  s.getDatabase(mail02srv, fileMail02, false);
+	    					try
+	    					{
+	    						dbMail02.remove();
+	    					}
+	    					catch(NotesException ne2)
+	    					{
+	    						System.out.println("Can't delete!");
+	    						doc.replaceItemValue("reqProcess", "NO");
+	    					}
+	    					dbMail02.recycle();
+	    					System.out.println("M2, deleted " + doc.getItemValueString("reqEGID"));
+	    				}
+	    				
+	    				doc.replaceItemValue("reqStatus", "DONE");
+	    				doc.computeWithForm(false, false);
+	    				doc.save();
+	    			}
+	
+	    		}
+	    		
+	    		
+	    		docTmp = view.getNextDocument(doc);
+	    		doc.recycle();
+	    		doc = docTmp;
+	    	}
+	    	System.out.println("END");
+    }
+    
+    
+    public void processSingleServerRequests() throws NotesException
+    {
+    	Session s = getSession();
+    	AgentContext agt = s.getAgentContext();
+    	Database db = agt.getCurrentDatabase();
+    	View view = db.getView("RequestQueue");
+    	Document profileDoc = db.getProfileDocument("Configuration", "");
+    	
+    	view.setAutoUpdate(false);
+    	
+    	String singleServer = profileDoc.getItemValueString("deleteFromServer");
+    	String prefix = profileDoc.getItemValueString("prefix");
+    	
+    	// Reads the states of checkboxes: 0 or 1
+    	//int deleteCluster1 = Integer.parseInt(profileDoc.getItemValueString("cluster1delete"));
+   
+    	String reqStatus = "";
+    	String filePath = "";
+    	Database dbMail = null;
+    	Document docTmp = null;
+    	Document doc = view.getFirstDocument();
+    	
+    	System.out.println("START");
+
+	    	while (doc!=null)
+	    	{	    		
+	    		reqStatus = doc.getItemValueString("reqStatus");
+	    		filePath = prefix.concat(doc.getItemValueString("reqEGID")).concat(".nsf");	    	   
+	    		
+	    		if ((reqStatus.contains("Queue")))
+	    		{
+	    			// request will be process...
+	    			dbMail =  s.getDatabase(singleServer, filePath, false);
+    				try
+    				{
+    					dbMail.remove();
+    				}
+    				catch(NotesException ne)
+    				{
+    					System.out.println("Cant delete!");
+    					doc.replaceItemValue("reqProcess", "NO");
+    				}
+    				
+					dbMail.recycle();
+					System.out.println("DB deleted: " + doc.getItemValueString("reqEGID"));
+	
+    				doc.replaceItemValue("reqStatus", "DONE");
+    				doc.computeWithForm(false, false);
+    				doc.save();
+	    			}
+
+	    		docTmp = view.getNextDocument(doc);
+	    		doc.recycle();
+	    		doc = docTmp;
+	    	}
+	    	System.out.println("END");
+    	
+    }
+    
+    
+    public void testProcess() throws NotesException
+    {
+    	Session s = getSession();
+    	AgentContext agt = s.getAgentContext();
+    	Database db = agt.getCurrentDatabase();
+    	View view = db.getView("RequestQueue");
+    	
+    	String mail01srv = "SVEHMAIL01/SRV/EPCOS";
+    	String mail02srv = "SVEHMAIL02/SRV/EPCOS";
+    	
+    	Document docTmp = null;
+    	Document doc = view.getFirstDocument();
+    	
+    	String reqStatus = "";
+    	String reqStatusOption ="";
+    	String fileMail01 = "";
+    	String fileMail02 = "";
+    	Database dbMail01 = null;
+    	Database dbMail02 = null;
+    	
+    	System.out.println("START");
+    	view.setAutoUpdate(false);
+    	while (doc!=null)
+    	{
+    		
+    		doc.replaceItemValue("reqProcess","Queue");
+    		if (doc.save())
+    			System.out.println("SAVED: " + doc.getItemValueString("reqEGID"));
+    		else
+    			System.out.println("Cant SAVED: " + doc.getItemValueString("reqEGID"));
+    		doc.computeWithForm(true, true);
+    		
+    		docTmp = view.getNextDocument(doc);
+    		doc.recycle();
+    		doc = docTmp;
+    	}
+    	System.out.println("END");
+    }
+}</java></javaproject></code>
+<rundata processeddocs='0' exitcode='0' agentdata='B2267F5814DFF2BDC125830D002489BB'>
+<agentmodified><datetime dst='true'>20180713T093100,32+02</datetime></agentmodified>
+<agentrun><datetime dst='true'>20180928T085313,69+02</datetime></agentrun>
+<runlog>Started running agent 'ProcessQueue' on 2018-09-28 08:53:01
+Running on all documents in database: 33177 total
+Found 33177 document(s) that match search criteria
+Ran Java Agent Class
+Done running agent 'ProcessQueue' on 2018-09-28 08:53:13
+</runlog></rundata>
+<item name='$JavaCompilerSource'><text>1.3</text></item>
+<item name='$JavaCompilerTarget'><text>1.2</text></item></agent>
+
