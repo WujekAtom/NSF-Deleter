@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='utf-8'?>
+<view name='RequestQueue' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.10'
+ replicaid='C125831F006578AA' showinmenu='false' noreplace='true' publicaccess='false'
+ designerversion='8.5.3' unreadmarks='none' onopengoto='lastopened' onrefresh='displayindicator'
+ headers='simple' opencollapsed='false' showresponsehierarchy='true' showmargin='true'
+ shrinkrows='false' extendlastcolumn='false' showhierarchies='false' unreadcolor='black'
+ rowlinecount='1' headerlinecount='1' rowspacing='1' bgcolor='white' totalscolor='black'
+ headerbgcolor='white' boldunreadrows='false' evaluateactions='false' allownewdocuments='false'
+ allowcustomizations='true' hidemarginborder='false' marginwidth='0px' marginbgcolor='white'
+ uniquekeys='false'>
+<noteinfo noteid='152' unid='BAE6926842A54A1EC12581A0002C618E' sequence='50'>
+<created><datetime dst='true'>20170919T100445,58+02</datetime></created>
+<modified><datetime dst='true'>20181007T202828,05+02</datetime></modified>
+<revised><datetime dst='true'>20180710T122435,80+02</datetime></revised>
+<lastaccessed><datetime dst='true'>20181007T202915,90+02</datetime></lastaccessed>
+<addedtofile><datetime dst='true'>20181007T202828,04+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
+<wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby><code
+ event='selection'><formula>SELECT Form="Request" &amp; (reqStatus = "Queue")</formula></code>
+<actionbar bgcolor='#f0f0f0' bordercolor='black'>
+<actionbuttonstyle bgcolor='#f0f0f0'/><font color='system'/><border style='solid'
+ width='0px 0px 1px'/>
+<action title='1. Add documents to queue' icon='20'><code event='action'>
+<simpleaction action='runagent' agent='CreateRequestsForDelete'/></code></action>
+<action title='2. Check replicas on cluster' icon='111'><code event='action'>
+<simpleaction action='runagent' agent='CheckClusterMailbox'/></code></action>
+<action title='3. Process req / Delete mailboxes' icon='4'><code event='action'>
+<simpleaction action='runagent' agent='ProcessQueue'/></code></action>
+<action title='separator1' displaytype='menuseparator'/>
+<action title='Mark to NOT delete' icon='149' hide='notes'><code event='click'><lotusscript
+>Sub Click(Source As Button)
+	Dim s As New NotesSession
+	Dim db As NotesDatabase
+	Dim dc As NotesDocumentCollection
+	Dim doc As NotesDocument
+	
+	Set db = s.Currentdatabase
+	Set dc = db.Unprocesseddocuments
+	Set doc = dc.GetFirstDocument()
+	
+	While Not doc Is Nothing
+		Call doc.ReplaceItemValue("reqProcess", "NO")
+		Call doc.Save(True, False, False)
+		
+		Set doc = dc.GetNextDocument(doc)
+		
+	Wend
+End Sub</lotusscript></code></action>
+<action title='Mark to delete' icon='137' hide='notes'><code event='click'><lotusscript
+>Sub Click(Source As Button)
+	Dim s As New NotesSession
+	Dim db As NotesDatabase
+	Dim dc As NotesDocumentCollection
+	Dim doc As NotesDocument
+	
+	Set db = s.Currentdatabase
+	Set dc = db.Unprocesseddocuments
+	Set doc = dc.GetFirstDocument()
+	
+	While Not doc Is Nothing
+		Call doc.ReplaceItemValue("reqProcess", "")
+		Call doc.Save(True, False, False)
+		
+		Set doc = dc.GetNextDocument(doc)
+		
+	Wend
+End Sub</lotusscript></code></action>
+<action title='Delete single EGID' icon='126' hide='notes'><code event='action'>
+<simpleaction action='runagent' agent='ProcessQueue'/></code></action>
+<action title='Import all Verse users' icon='1' hide='notes'><code event='action'>
+<simpleaction action='runagent' agent='ImportAllVerseUsers'/></code></action>
+<action title='Process NON cluster' icon='83'><code event='action'>
+<simpleaction action='runagent' agent='(ProcessSingleServerQueue)'/></code></action>
+<action title='Configuration'><code event='click'><formula>@Command([EditProfileDocument]; "Configuration")</formula></code></action></actionbar>
+<column hidedetailrows='false' itemname='reqDep' width='6.5000' resizable='true'
+ separatemultiplevalues='false' sortnoaccent='true' sortnocase='true' showaslinks='false'><columnheader
+ title='Department'><font size='9pt' style='bold'/></columnheader></column>
+<column hidedetailrows='false' itemname='$6' width='14.2500' resizable='true'
+ separatemultiplevalues='false' sortnoaccent='false' sortnocase='true' showaslinks='false'><columnheader
+ title='Mail server'><font size='9pt' style='bold'/></columnheader><code event='value'><formula
+>@Name([Abbreviate];reqMailServer)</formula></code></column>
+<column hidedetailrows='false' itemname='$7' width='22.7500' resizable='true'
+ separatemultiplevalues='false' sortnoaccent='false' sortnocase='true' showaslinks='false'><columnheader
+ title='Full Name'><font size='9pt' style='bold'/></columnheader><code event='value'><formula
+>@Name([Abbreviate];reqFullName)</formula></code></column>
+<column resort='both' hidedetailrows='false' itemname='reqEGID' width='6.6250'
+ resizable='true' separatemultiplevalues='false' sortnoaccent='false' sortnocase='true'
+ showaslinks='false'><columnheader title='Egid'><font size='9pt' style='bold'/></columnheader></column>
+<column hidedetailrows='false' itemname='reqMail01' width='10' resizable='true'
+ separatemultiplevalues='false' sortnoaccent='false' sortnocase='true' showaslinks='false'><columnheader
+ title='File on Mail01'><font size='9pt' style='bold'/></columnheader></column>
+<column hidedetailrows='false' itemname='reqMail02' width='10' resizable='true'
+ separatemultiplevalues='false' sortnoaccent='false' sortnocase='true' showaslinks='false'><columnheader
+ title='File on Mail02'><font size='9pt' style='bold'/></columnheader></column>
+<column hidedetailrows='false' itemname='reqStatus' width='7.7500' resizable='true'
+ separatemultiplevalues='false' sortnoaccent='false' sortnocase='true' showaslinks='false'><columnheader
+ title='Status'><font size='9pt' style='bold'/></columnheader></column>
+<column hidedetailrows='false' itemname='reqProcess' width='8.6250' resizable='true'
+ separatemultiplevalues='false' sortnoaccent='false' sortnocase='true' showaslinks='false'><columnheader
+ title='Not processing'><font size='9pt' style='bold'/></columnheader></column></view>
+

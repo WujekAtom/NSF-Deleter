@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='utf-8'?>
+<agent name='ImportEGIDFromFile' xmlns='http://www.lotus.com/dxl' version='9.0'
+ maintenanceversion='1.10' replicaid='C125831F006578AA' hide='v3' publicaccess='false'
+ designerversion='8.5.3'>
+<noteinfo noteid='402' unid='046AE4B4F320E565C125820C0048402E' sequence='4'>
+<created><datetime>20180105T140910,22+01</datetime></created>
+<modified><datetime dst='true'>20181007T202854,14+02</datetime></modified>
+<revised><datetime>20180105T143851,29+01</datetime></revised>
+<lastaccessed><datetime dst='true'>20181007T202854,13+02</datetime></lastaccessed>
+<addedtofile><datetime dst='true'>20181007T202854,13+02</datetime></addedtofile></noteinfo>
+<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
+<wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby>
+<designchange><datetime>20180105T143859,73+01</datetime></designchange>
+<trigger type='actionsmenu'/>
+<documentset type='runonce'/><code event='action'><javaproject class='JavaAgent.class'
+ codepath='c:\Notes\Data'><java name='JavaAgent.java'>import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
+import lotus.domino.*;
+
+public class JavaAgent extends AgentBase {
+
+    public void NotesMain() {
+
+      try {
+          Session session = getSession();
+          AgentContext agentContext = session.getAgentContext();
+
+          // (Your code goes here)
+          System.out.println("START");
+          
+          Vector v = readFile();
+          createRequests(v);
+          
+          System.out.println("END");
+
+      } catch(Exception e) {
+          e.printStackTrace();
+       }
+   }
+    
+    public Vector readFile() throws IOException
+    {
+    	Vector vec = new Vector(200);
+    	
+    	// Getting selected file's path. This will open window with file chooser
+    	String CSVfile = getFilePathWindow();	
+    	FileReader f = null;
+    	try
+    	{
+    		if (CSVfile == null)
+    			System.out.println("FILE DIDN'T CHOOSE!");
+    		else
+    		{
+	    		f = new FileReader(CSVfile);
+	    		BufferedReader bufor = new BufferedReader(f);
+	        	String oneLine = "";
+	        	String strTMP = "";
+	        	
+	        	//reading each line from file and adding it to Vector [list]. This vector is returning at the end and
+	        	// can be processed later.
+	        	
+	        	while ((oneLine = bufor.readLine())!=null)
+	        	{
+	        		if (!oneLine.isEmpty())	//Skip empty line
+	        			vec.add(oneLine);
+	        	}
+	        	bufor.close();
+	        	f.close();
+    		}      
+    		
+    	}
+    	catch(IOException e)
+    	{
+    		e.printStackTrace();
+    	}
+    	
+    	return vec;
+    	
+    }
+    
+    /*
+     * Method is opening Java Swing file chooser in which user can select file to import.
+     * If no files is selected, returns null.
+     * When file is chose, the full path to file on disk will be return.
+     * TThis path is return to process later.
+     */
+    public String getFilePathWindow()
+    {
+    	JButton button = new JButton();
+    	JFileChooser fc = new JFileChooser();
+    	String filePath = "";
+    	
+    	fc.setCurrentDirectory(new java.io.File(""));
+    	fc.setDialogTitle("Choose file to import users");
+    	fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+    	
+    	JOptionPane.showMessageDialog(null, "You are going to import list mailboxes to delete. \n" +
+    			"Requests in application will be created. \n\n");
+    	
+    	if (fc.showOpenDialog(button) == JFileChooser.APPROVE_OPTION)
+    	{
+    		filePath = fc.getSelectedFile().getAbsolutePath().toString();
+    	}
+    	else
+    		return null;
+    	
+    	return filePath;
+
+    }
+    
+    /*
+     * Method gets the vector with list of EGIDs and iterate throught vector, creating documents in database.
+     * 
+     */
+    
+    public void createRequests(Vector egidVector) throws NotesException
+    {
+    	Session s = getSession();
+    	AgentContext agt = s.getAgentContext();
+    	Database db = agt.getCurrentDatabase();
+    	Document doc = null;
+    	Document docTmp = null;
+    	
+    	
+    	for (int i=0; i&lt;egidVector.size(); i++)
+    	{
+    		doc = db.createDocument();
+    		doc.replaceItemValue("Form", "Request");
+    		doc.replaceItemValue("reqEGID", egidVector.get(i).toString());
+    		doc.replaceItemValue("reqStatus", "Queue");
+    		
+    		if (doc.computeWithForm(false, false))
+        	{
+        		System.out.println("Request for " + egidVector.get(i).toString() + " CREATED");
+        		doc.save(true,true);
+        		doc.recycle();
+        	}
+        	else
+        		System.out.println("FAILED creating request for " + egidVector.get(i).toString());
+    	}
+    }
+    
+    
+    /*
+     * Testing content of vector [list]
+     */
+    public void testReadVec(Vector vc)
+    {
+    	System.out.println("VECTOR: " + vc.size() );
+    	for (int i=0; i&lt;vc.size(); i++)
+    		System.out.println(vc.get(i).toString());
+    	
+    	
+    }
+    
+    
+}</java></javaproject></code>
+<rundata processeddocs='0' exitcode='0' agentdata='FE39E356C08BD550C125820E00440711'>
+<agentmodified><datetime>20180105T143851,31+01</datetime></agentmodified>
+<agentrun><datetime dst='true'>20181003T102225,77+02</datetime></agentrun>
+<runlog>Started running agent 'ImportEGIDFromFile' on 2018-10-03 10:16:54
+Ran Java Agent Class
+Done running agent 'ImportEGIDFromFile' on 2018-10-03 10:22:25
+</runlog></rundata>
+<item name='$JavaCompilerSource'><text>1.3</text></item>
+<item name='$JavaCompilerTarget'><text>1.2</text></item></agent>
+
