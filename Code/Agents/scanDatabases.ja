@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<agent xmlns="http://www.lotus.com/dxl" name="scanDatabases" hide="v3" publicaccess="false">
+  <trigger type="actionsmenu"/>
+  <documentset type="all"/>
+  <code event="action">
+    <javaproject class="JavaAgent.class">
+      <java name="JavaAgent.java">import java.util.ArrayList;
+
+import CommonUtil.*;
+import docACL.DocACL;
+import lotus.domino.*;
+
+/*
+ * Created by: Tomasz Wieszczura/Poland/IBM
+ * Status for day 9.10.2018: agent finished
+ */
+
+public class JavaAgent extends AgentBase {
+
+    public void NotesMain() {
+
+      try {
+          Session session = getSession();
+          AgentContext agentContext = session.getAgentContext();
+          	
+          // (Your code goes here)
+          ReadProfileDocument pr = new ReadProfileDocument(session);
+          Document profile = pr.getProfileDocument();
+          String server = profile.getItemValueString("serverName");
+          GUIprompt prompt = new GUIprompt();
+          
+          if (server.isEmpty())
+        	  if (prompt.promptWindow("You are going to scan all DB on LOCAL machine! Please fullfil the CONFIGURATION!\n Do you want to continue?"))
+            	  scanDatabases(server);
+              else
+            	  System.out.println("Fulfill the CONFIGURATION.");
+          else
+        	  if (prompt.promptWindow("You are going to scan all DB on server and creates documents\n in this application.\n Are you sure?"))
+        		  scanDatabases(server);
+        	  else
+        		  System.out.println("Not processing");
+                  
+      }
+      catch(NotesException ne)
+      {
+    	  ne.printStackTrace();
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+       }
+   }
+    
+    /*
+     * Method is looking for all *.nsf files on server. 
+     * Server - this is the machine on which the agent is running. When you use this application on local machine,
+     * it will scan all *.nsf on your local computer.
+     * 
+     * TODO: Add level access - DONE
+     * TODO: Read server from profile doc - DONE
+     */
+    public void scanDatabases(String server) throws NotesException
+    {
+    	Session s = getSession();    	
+    	AgentContext agt = s.getAgentContext();
+    	DbDirectory dir = s.getDbDirectory(server);	
+    	String serverName  = dir.getName();
+    	String strACLEntries = "";
+    	String relativePath = "";
+    	Database db = null;
+    	DocACL docacl = null;
+    	ArrayList dbList = new ArrayList();	// List of DB with its ACL. This list will be further use to create documents in DB
+    	ACL aclEntries = null;
+    	
+    	System.out.println("Agent START execution.");
+    	
+    	if (serverName.equals(""))
+    		serverName = "Local";    	
+    	System.out.println("Server: " + serverName + "\n");
+    	
+    	// get first database on a server. It takes db from the server that this app resides.
+    	db = dir.getFirstDatabase(DbDirectory.DATABASE);
+    	    	    
+    	while (db!=null)
+    	{
+    		try
+    		{
+    			// Open current DB to read its ACL. In case DB is corrupted try-catch will throw exception and continue with next DB.
+    			relativePath = db.getFilePath();	// get relative DB's path
+    												// after db.open() the relative path shows: C:\(..)
+    			System.out.println(db.getFilePath());
+    			db.open();
+    			if(db.isOpen())
+            	{    				
+            		aclEntries = db.getACL();					// Getting db's ACL entries
+            		showACL(aclEntries);
+            		strACLEntries = getACLEntries(aclEntries);	// Retrieving ACL's entry as string            		            	
+            		docacl = new DocACL(db.getFileName(), relativePath, strACLEntries);	// Create object with info about the current DB
+            		dbList.add(docacl);		// adding DB's info to the list for further processing 
+            	}
+            	else
+            		System.out.println("DB not opened");
+    		}
+    		catch(NotesException ne)
+    		{
+    			System.out.println("DB open error: " + db.getFilePath());
+    			ne.printStackTrace();
+    		}
+
+    		db = dir.getNextDatabase();
+    		
+    	}
+    	createDocuments(dbList);	// calling method to create documents for each entry on a list of DB
+    	
+    	System.out.println("Agent FINISHED execution.");
+    }
+    
+    /*
+     * Method displays ACL entries with level of access.
+     * 
+     */
+    public void showACL(ACL a) throws NotesException
+    {
+    	ACLEntry ae = a.getFirstEntry();
+    	ACLEntry aeTmp = null;
+    	
+    	while (ae!=null)
+    	{    		
+    		System.out.println(ae.getName() + " || " + ae.getLevel());    		
+    		aeTmp = a.getNextEntry(ae);
+    		ae.recycle();
+    		ae = aeTmp;
+    	}
+    }
+    
+    
+    /*
+     * Method returns all ACL entries as String with new line after each entry.
+     * As a parameter it gets ACL object and iterate through ACLEntries and gets its name as String.
+     */
+    public String getACLEntries(ACL a) throws NotesException
+    {
+    	StringBuilder str = new StringBuilder();	// For loop it is more efficient way to compose String
+    	
+    	ACLEntry ae = a.getFirstEntry();
+    	ACLEntry aeTmp = null;
+    	
+    	// Iterate through all ACL's entries
+    	while (ae!=null)
+    	{    		
+    		str.append(ae.getName());
+    		str.append(" - ");
+    		str.append(ae.getLevel());
+    		str.append(System.lineSeparator());
+    		aeTmp = a.getNextEntry(ae);
+    		ae.recycle();
+    		ae = aeTmp;
+    	}
+    	
+    	return str.toString();
+    }
+    
+
+    
+    /*
+     * Method creates documents in application.
+     * it gets ArrayList of all databases on a server and for each DB it creates document with information about DB
+     */
+    public void createDocuments(ArrayList dbList) throws NotesException
+    {
+    	Session s = getSession();
+    	AgentContext agt = s.getAgentContext();
+    	Database db = agt.getCurrentDatabase();
+    	Document doc = null;
+    	DocACL aclTmp = null;
+    	
+    	for (int i = 0; i &lt; dbList.size(); i++)
+    	{
+    		aclTmp = (DocACL)dbList.get(i);
+    		doc = db.createDocument();
+    		doc.replaceItemValue("Form", "ACLdoc");
+    		doc.replaceItemValue("dbServer", db.getServer());
+    		doc.replaceItemValue("dbFileName", aclTmp.getDbName());
+    		doc.replaceItemValue("dbPath", aclTmp.getDbPath());
+    		doc.replaceItemValue("aclEntries", aclTmp.getEntries());
+    		
+    		doc.computeWithForm(false, false);
+    		doc.save(true,true);
+    		doc.recycle();
+    	}
+    	
+    }
+
+}</java>
+      <sharedlibraryref name="DocACL"/>
+      <sharedlibraryref name="CommonUtility"/>
+    </javaproject>
+  </code>
+  <item name="$JavaCompilerSource">
+    <text>1.5</text>
+  </item>
+  <item name="$JavaCompilerTarget">
+    <text>1.5</text>
+  </item>
+</agent>
