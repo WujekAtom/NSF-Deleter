@@ -1,16 +1,6 @@
-<?xml version='1.0' encoding='utf-8'?>
-<imageresource name='$DBIcon' xmlns='http://www.lotus.com/dxl' version='9.0'
- maintenanceversion='1.10' replicaid='C125831F006578AA' publicaccess='false'
- designerversion='8.5.3' imagename='C:\Users\IBM_ADMIN\Pictures\Ikony\nsfDeleter_32x32.png'>
-<noteinfo noteid='76a' unid='4AF997B2B6010F1CC125832000482D14' sequence='4'>
-<created><datetime dst='true'>20181008T150821,32+02</datetime></created>
-<modified><datetime dst='true'>20181008T150918,67+02</datetime></modified>
-<revised><datetime dst='true'>20181008T150918,66+02</datetime></revised>
-<lastaccessed><datetime dst='true'>20181008T150918,66+02</datetime></lastaccessed>
-<addedtofile><datetime dst='true'>20181008T150821,34+02</datetime></addedtofile></noteinfo>
-<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
-<wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby><jpeg
->
+<?xml version="1.0" encoding="UTF-8"?>
+<imageresource xmlns="http://www.lotus.com/dxl" imagename="C:\Users\IBM_ADMIN\Pictures\Ikony\nsfDeleter_32x32.png" name="$DBIcon" noreplace="true" publicaccess="false" refresh="true">
+  <jpeg>
 iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBI
 WXMAABlPAAAZTwGCO7w1AAAAB3RJTUUH4goFFhQFrFkEogAABsRJREFUWMOtl2twVdUVx39rn/vI
 6/LIoOUVEpJAaARSIZCQliY8MplmqrUOOO3UVikzpTqd1g+tWqelrY5jHUam4ygjKGLVViZOR/xg
@@ -45,7 +35,7 @@ jpSyOzkA7e3tFBUVHRCRzcaYb0QikamhUOgmn8+3S0Riqjp7//79A8BvgenAS57ofGBpiqqDkwLg
 ROjp6aGxsfF64rWee645xu0qT58+faCwsLAVyBYRx/s77gf6IpFIX0dHRz8w4F0RLwntA+4B3htP
 //8ATMAjcOVO/v4AAAAASUVORK5CYII=
 </jpeg>
-<item name='$FileSize' sign='true'><number>1847</number></item>
-<item name='$MimeType' sign='true'><text>image/png</text></item>
-<item name='$FileModDT' sign='true'><datetime dst='true'>20181006T002005,11+02</datetime></item></imageresource>
-
+  <item name="$MimeType" sign="true">
+    <text>image/png</text>
+  </item>
+</imageresource>

@@ -1,17 +1,14 @@
-<?xml version='1.0' encoding='utf-8'?>
-<frameset name='MainFrameset' xmlns='http://www.lotus.com/dxl' version='9.0'
- maintenanceversion='1.10' replicaid='C125831F006578AA' publicaccess='false'
- designerversion='8.5.3' columns='22% 78%' spacing='0px' borderwidth='6px'
- bordercolor='none'>
-<noteinfo noteid='156' unid='8D84C48A02FF6451C12581A100418905' sequence='22'>
-<created><datetime dst='true'>20170920T135549,17+02</datetime></created>
-<modified><datetime dst='true'>20181007T202828,25+02</datetime></modified>
-<revised><datetime dst='true'>20180710T115338,26+02</datetime></revised>
-<lastaccessed><datetime dst='true'>20181007T202828,24+02</datetime></lastaccessed>
-<addedtofile><datetime dst='true'>20181007T202828,24+02</datetime></addedtofile></noteinfo>
-<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
-<wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby>
-<frame name='MenuFrame' targetframe='ViewFrame' border3d='false' scrolling='never'><namedelementlink
- type='page' name='MenuPage2'/></frame>
-<frame name='ViewFrame' border3d='false'><namedelementlink type='view' name='RequestQueue'/></frame></frameset>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<frameset xmlns="http://www.lotus.com/dxl" name="MainFrameset" publicaccess="false" columns="260px 61%" spacing="0px" borderwidth="0px" bordercolor="none">
+  <frameset rows="52 48" spacing="0px">
+    <frame name="MenuFrame" targetframe="ViewFrame" border3d="false" scrolling="never">
+      <namedelementlink type="page" name="MenuPage"/>
+    </frame>
+    <frame name="LogoFrame" border3d="false" scrolling="never">
+      <namedelementlink type="page" name="LogoPage"/>
+    </frame>
+  </frameset>
+  <frame name="ViewFrame" border3d="false">
+    <namedelementlink type="view" name="RequestQueue"/>
+  </frame>
+</frameset>
