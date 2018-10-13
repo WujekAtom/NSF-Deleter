@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scriptlibrary xmlns="http://www.lotus.com/dxl" name="CommonUtility" hide="v3 v4strict">
+  <code event="library">
+    <javaproject class="JavaAgent.class">
+      <java name="CommonUtil/ACLExtract.java">package CommonUtil;
+
+import lotus.domino.ACL;
+import lotus.domino.ACLEntry;
+import lotus.domino.NotesException;
+
+public class ACLExtract {
+
+	public ACLExtract()
+	{
+		// default constructor
+	}
+	
+	public String getACLEntries(ACL a) throws NotesException
+    {
+    	StringBuilder str = new StringBuilder();	// For loop it is more efficient way to compose String
+    	
+    	ACLEntry ae = a.getFirstEntry();
+    	ACLEntry aeTmp = null;
+    	
+    	// Iterate through all ACL's entries
+    	while (ae!=null)
+    	{    		
+    		str.append(ae.getName());
+    		str.append(" - ");
+    		str.append(ae.getLevel());
+    		str.append(System.lineSeparator());
+    		aeTmp = a.getNextEntry(ae);
+    		ae.recycle();
+    		ae = aeTmp;
+    	}
+    	
+    	return str.toString();
+    }
+}
+</java>
+      <java name="CommonUtil/GUIprompt.java">package CommonUtil;
+
+import javax.swing.JOptionPane;
+
+import lotus.notes.AgentBase;
+
+public class GUIprompt extends AgentBase {
+
+	/*
+	 * Shows windows with OK &amp; CANCEL option
+	 */
+	public boolean promptWindow(String msg)
+	{
+		int choseOption = JOptionPane.showConfirmDialog(null, msg, "", JOptionPane.YES_NO_OPTION);
+		if (choseOption == JOptionPane.YES_OPTION)
+			return true;
+		else
+			return false;
+	}	
+	
+	/*
+	 * Displays list of choices
+	 */
+	public String inputWindow(String[] list, String msg)
+    {    	
+    	String s = (String)JOptionPane.showInputDialog(null, msg, "Choose option",
+    	        JOptionPane.QUESTION_MESSAGE, null, list, list[0]);
+    	return s;
+    }
+	
+	
+//	public String inputWindow()
+//    {    	
+//		String access[] = {"NOACCESS", "Manager", "Designer", "Editor", "Author", "Reader", "Depositor" };
+//    	String s = (String)JOptionPane.showInputDialog(null, "ttt", "Choose option",
+//    	        JOptionPane.QUESTION_MESSAGE, null, access, access[0]);
+//    	return s;
+//    }
+	
+	
+	/*
+	 * Simple OK window with messages
+	 */
+	public void outputGUI(String text)
+    {
+    	JOptionPane.showMessageDialog(null,text);
+    }
+}
+</java>
+      <java name="CommonUtil/ReadProfileDocument.java">package CommonUtil;
+
+import java.util.Vector;
+
+import lotus.domino.*;
+
+public class ReadProfileDocument extends AgentBase {
+
+	private Session s;
+	private AgentContext agt;
+	private Database db;
+	
+	public ReadProfileDocument(Session ss) throws NotesException
+	{
+		this.s = ss;
+		this.agt = this.s.getAgentContext();		
+		this.db = this.s.getCurrentDatabase();
+	}
+	
+	public Document getProfileDocument() throws NotesException
+	{
+		Document profile = db.getProfileDocument("Configuration", "");	
+		if (profile.isProfile())
+			return profile;
+		else
+			return null;
+				
+	}
+	
+	public void printProfileDoc() throws NotesException	
+	{
+		Document profile = db.getProfileDocument("Configuration", "");
+		Vector v = profile.getItems();
+		for (int i = 0; i&lt;v.size(); i++)
+		{
+			Item it = (Item)v.get(i);
+			System.out.println(it.getText());
+		}
+		
+	}
+}
+</java>
+    </javaproject>
+  </code>
+  <item name="$JavaCompilerSource">
+    <text>1.3</text>
+  </item>
+  <item name="$JavaCompilerTarget">
+    <text>1.2</text>
+  </item>
+</scriptlibrary>

@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <view xmlns="http://www.lotus.com/dxl" name="RequestQueue" showinmenu="false" noreplace="true" publicaccess="false" unreadmarks="none" onopengoto="lastopened" onrefresh="displayindicator" headers="simple" opencollapsed="false" showresponsehierarchy="true" showmargin="true" shrinkrows="false" extendlastcolumn="false" showhierarchies="false" unreadcolor="black" rowlinecount="1" headerlinecount="1" rowspacing="1" bgcolor="white" totalscolor="black" headerbgcolor="white" boldunreadrows="false" evaluateactions="false" allownewdocuments="false" allowcustomizations="true" hidemarginborder="false" marginwidth="0px" marginbgcolor="white" uniquekeys="false">
   <code event="selection">
-    <formula>SELECT Form="Request" &amp; (reqStatus = "Queue")</formula>
+    <formula>SELECT Form="Request" &amp; (reqStatus = "Queue" | reqStatus = "ERROR")</formula>
   </code>
   <actionbar bgcolor="#f0f0f0" bordercolor="black">
     <actionbuttonstyle heighttype="background" bgcolor="#f0f0f0" displayborder="notesstyle"/>
     <font color="system"/>
     <border style="solid" width="0px 0px 1px" color="system"/>
-    <action title="1. Add documents to queue" icon="20">
+    <action title="Search in DominoDirectory" icon="20">
       <code event="action">
         <simpleaction action="runagent" agent="CreateRequestsForDelete"/>
       </code>
     </action>
-    <action title="2. Check replicas on cluster" icon="111">
+    <action title="Check replicas on cluster" icon="111">
       <code event="action">
         <simpleaction action="runagent" agent="CheckClusterMailbox"/>
       </code>
     </action>
-    <action title="3. Process req / Delete mailboxes" icon="4">
+    <action title="Delete mailboxes" icon="4">
       <code event="action">
         <simpleaction action="runagent" agent="ProcessQueue"/>
+      </code>
+    </action>
+    <action title="Import from file" icon="27">
+      <code event="action">
+        <simpleaction action="runagent" agent="(ImportMailboxesFromFile)"/>
       </code>
     </action>
     <action title="separator1" displaytype="menuseparator"/>
@@ -79,7 +84,7 @@ End Sub
         <simpleaction action="runagent" agent="ImportAllVerseUsers"/>
       </code>
     </action>
-    <action title="Process NON cluster" icon="83">
+    <action title="Process NON cluster" icon="83" hide="notes">
       <code event="action">
         <simpleaction action="runagent" agent="(ProcessSingleServerQueue)"/>
       </code>
@@ -110,6 +115,11 @@ End Sub
     <code event="value">
       <formula>@Name([Abbreviate];reqFullName)</formula>
     </code>
+  </column>
+  <column hidedetailrows="false" itemname="mailPath" width="21.1250" resizable="true" separatemultiplevalues="false" sortnoaccent="false" sortnocase="true" showaslinks="false">
+    <columnheader title="File path">
+      <font size="9pt" style="bold"/>
+    </columnheader>
   </column>
   <column resort="both" hidedetailrows="false" itemname="reqEGID" width="6.6250" resizable="true" separatemultiplevalues="false" sortnoaccent="false" sortnocase="true" showaslinks="false">
     <columnheader title="Egid">

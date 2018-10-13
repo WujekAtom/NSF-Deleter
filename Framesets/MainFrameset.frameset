@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<frameset xmlns="http://www.lotus.com/dxl" name="MainFrameset" publicaccess="false" columns="260px 61%" spacing="0px" borderwidth="0px" bordercolor="none">
+<frameset xmlns="http://www.lotus.com/dxl" name="MainFrameset" publicaccess="false" columns="288px 61" spacing="0px" borderwidth="0px" bordercolor="none">
   <frameset rows="52 48" spacing="0px">
     <frame name="MenuFrame" targetframe="ViewFrame" border3d="false" scrolling="never">
       <namedelementlink type="page" name="MenuPage"/>

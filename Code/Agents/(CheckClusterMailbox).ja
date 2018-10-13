@@ -1,19 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
-<agent name='(CheckClusterMailbox)' xmlns='http://www.lotus.com/dxl' version='9.0'
- maintenanceversion='1.10' replicaid='C125831F006578AA' hide='v3' publicaccess='false'
- designerversion='8.5.3'>
-<noteinfo noteid='2a6' unid='3FA19B30E231AEBFC12581A70049BADD' sequence='74'>
-<created><datetime dst='true'>20170926T152519,65+02</datetime></created>
-<modified><datetime dst='true'>20181007T202842,41+02</datetime></modified>
-<revised><datetime dst='true'>20180710T153406,90+02</datetime></revised>
-<lastaccessed><datetime dst='true'>20181007T202842,40+02</datetime></lastaccessed>
-<addedtofile><datetime dst='true'>20181007T202842,40+02</datetime></addedtofile></noteinfo>
-<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
-<wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby>
-<designchange><datetime dst='true'>20180710T153408,01+02</datetime></designchange>
-<trigger type='agentlist'/>
-<documentset type='all'/><code event='action'><javaproject class='JavaAgent.class'
- codepath='c:\Notes\Data'><java name='JavaAgent.java'>import lotus.domino.*;
+<?xml version="1.0" encoding="UTF-8"?>
+<agent xmlns="http://www.lotus.com/dxl" name="(CheckClusterMailbox)" hide="v3" publicaccess="false">
+  <trigger type="agentlist"/>
+  <documentset type="selected"/>
+  <code event="action">
+    <javaproject class="JavaAgent.class">
+      <java name="JavaAgent.java">import lotus.domino.*;
 
 public class JavaAgent extends AgentBase {
 
@@ -174,9 +165,13 @@ public class JavaAgent extends AgentBase {
 		
 		System.out.println("END");
 	}
-}</java></javaproject></code>
-<rundata processeddocs='0' exitcode='0'>
-<agentmodified><datetime dst='true'>20180710T153408,04+02</datetime></agentmodified></rundata>
-<item name='$JavaCompilerSource'><text>1.3</text></item>
-<item name='$JavaCompilerTarget'><text>1.2</text></item></agent>
-
+}</java>
+    </javaproject>
+  </code>
+  <item name="$JavaCompilerSource">
+    <text>1.3</text>
+  </item>
+  <item name="$JavaCompilerTarget">
+    <text>1.2</text>
+  </item>
+</agent>

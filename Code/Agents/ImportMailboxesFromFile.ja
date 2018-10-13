@@ -1,19 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
-<agent name='ImportEGIDFromFile' xmlns='http://www.lotus.com/dxl' version='9.0'
- maintenanceversion='1.10' replicaid='C125831F006578AA' hide='v3' publicaccess='false'
- designerversion='8.5.3'>
-<noteinfo noteid='402' unid='046AE4B4F320E565C125820C0048402E' sequence='4'>
-<created><datetime>20180105T140910,22+01</datetime></created>
-<modified><datetime dst='true'>20181007T202854,14+02</datetime></modified>
-<revised><datetime>20180105T143851,29+01</datetime></revised>
-<lastaccessed><datetime dst='true'>20181007T202854,13+02</datetime></lastaccessed>
-<addedtofile><datetime dst='true'>20181007T202854,13+02</datetime></addedtofile></noteinfo>
-<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
-<wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby>
-<designchange><datetime>20180105T143859,73+01</datetime></designchange>
-<trigger type='actionsmenu'/>
-<documentset type='runonce'/><code event='action'><javaproject class='JavaAgent.class'
- codepath='c:\Notes\Data'><java name='JavaAgent.java'>import java.io.BufferedReader;
+<?xml version="1.0" encoding="UTF-8"?>
+<agent xmlns="http://www.lotus.com/dxl" name="(ImportMailboxesFromFile)" hide="v3" publicaccess="false">
+  <trigger type="agentlist"/>
+  <documentset type="runonce"/>
+  <code event="action">
+    <javaproject class="JavaAgent.class">
+      <java name="JavaAgent.java">import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Vector;
@@ -23,6 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import lotus.domino.*;
+import CommonUtil.*;
 
 public class JavaAgent extends AgentBase {
 
@@ -47,6 +39,7 @@ public class JavaAgent extends AgentBase {
     
     public Vector readFile() throws IOException
     {
+    	
     	Vector vec = new Vector(200);
     	
     	// Getting selected file's path. This will open window with file chooser
@@ -127,7 +120,11 @@ public class JavaAgent extends AgentBase {
     	Database db = agt.getCurrentDatabase();
     	Document doc = null;
     	Document docTmp = null;
+    	String mailPath = "";
     	
+    	ReadProfileDocument pr = new ReadProfileDocument(s);
+    	Document profile = pr.getProfileDocument();
+    	String pathPrefix = profile.getItemValueString("prefix");
     	
     	for (int i=0; i&lt;egidVector.size(); i++)
     	{
@@ -135,6 +132,11 @@ public class JavaAgent extends AgentBase {
     		doc.replaceItemValue("Form", "Request");
     		doc.replaceItemValue("reqEGID", egidVector.get(i).toString());
     		doc.replaceItemValue("reqStatus", "Queue");
+    		mailPath = egidVector.get(i).toString();
+    		if (mailPath.contains(".nsf"))
+    			doc.replaceItemValue("mailPath", pathPrefix.concat(egidVector.get(i).toString()));
+    		else
+    			doc.replaceItemValue("mailPath", pathPrefix.concat(egidVector.get(i).toString().concat(".nsf")));
     		
     		if (doc.computeWithForm(false, false))
         	{
@@ -161,14 +163,14 @@ public class JavaAgent extends AgentBase {
     }
     
     
-}</java></javaproject></code>
-<rundata processeddocs='0' exitcode='0' agentdata='FE39E356C08BD550C125820E00440711'>
-<agentmodified><datetime>20180105T143851,31+01</datetime></agentmodified>
-<agentrun><datetime dst='true'>20181003T102225,77+02</datetime></agentrun>
-<runlog>Started running agent 'ImportEGIDFromFile' on 2018-10-03 10:16:54
-Ran Java Agent Class
-Done running agent 'ImportEGIDFromFile' on 2018-10-03 10:22:25
-</runlog></rundata>
-<item name='$JavaCompilerSource'><text>1.3</text></item>
-<item name='$JavaCompilerTarget'><text>1.2</text></item></agent>
-
+}</java>
+      <sharedlibraryref name="CommonUtility"/>
+    </javaproject>
+  </code>
+  <item name="$JavaCompilerSource">
+    <text>1.3</text>
+  </item>
+  <item name="$JavaCompilerTarget">
+    <text>1.2</text>
+  </item>
+</agent>

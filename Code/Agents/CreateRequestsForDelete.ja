@@ -1,19 +1,10 @@
-<?xml version='1.0' encoding='utf-8'?>
-<agent name='CreateRequestsForDelete' xmlns='http://www.lotus.com/dxl' version='9.0'
- maintenanceversion='1.10' replicaid='C125831F006578AA' hide='v3' publicaccess='false'
- designerversion='8.5.3' restrictions='unrestricted'>
-<noteinfo noteid='176' unid='43207142FDFD8028C12581A10044A57B' sequence='110'>
-<created><datetime dst='true'>20170920T142948,11+02</datetime></created>
-<modified><datetime dst='true'>20181007T202831,06+02</datetime></modified>
-<revised><datetime dst='true'>20180710T122405,59+02</datetime></revised>
-<lastaccessed><datetime dst='true'>20181007T202831,05+02</datetime></lastaccessed>
-<addedtofile><datetime dst='true'>20181007T202831,05+02</datetime></addedtofile></noteinfo>
-<updatedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></updatedby>
-<wassignedby><name>CN=Tomasz Wieszczura/OU=Poland/O=IBM</name></wassignedby>
-<designchange><datetime dst='true'>20180710T122405,94+02</datetime></designchange>
-<trigger type='actionsmenu'/>
-<documentset type='runonce'/><code event='action'><javaproject class='JavaAgent.class'
- codepath='c:\Notes\Data'><java name='JavaAgent.java'>import java.awt.BorderLayout;
+<?xml version="1.0" encoding="UTF-8"?>
+<agent xmlns="http://www.lotus.com/dxl" name="CreateRequestsForDelete" hide="v3" publicaccess="false" restrictions="unrestricted">
+  <trigger type="actionsmenu"/>
+  <documentset type="runonce"/>
+  <code event="action">
+    <javaproject class="JavaAgent.class">
+      <java name="JavaAgent.java">import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -29,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import CommonUtil.*;
 
 
 public class JavaAgent extends AgentBase {
@@ -43,16 +35,24 @@ public class JavaAgent extends AgentBase {
           AgentContext agentContext = session.getAgentContext();
 
           // (Your code goes here)
+          GUIprompt gui = new GUIprompt();
           
-          String s = inputGUI();
-          if (s!=null)
-        	  searchInNAB(s);
+          ReadProfileDocument pr = new ReadProfileDocument(session);
+          Document profile = pr.getProfileDocument();
+          String srv = profile.getItemValueString("NABserver");
+          if (srv.isEmpty())
+        	  gui.promptWindow("Names server is EMPTY! Please fulfill the COONFIGURATION!");
           else
           {
-        	  System.out.println("You didn't provide department code!");
-        	  outputGUI("You didn't provide department code!");
+        	  String s = inputGUI();
+              if ((s!=null) &amp;&amp; (!s.isEmpty()))
+            	  searchInNAB(s);
+              else
+              {
+            	  System.out.println("You didn't provide key to search!");
+            	  gui.outputGUI("You didn't provide key to search!");
+              }
           }
-
       }
       catch(NotesException ne)
       {
@@ -74,6 +74,7 @@ public class JavaAgent extends AgentBase {
     	Database dbCurr = agt.getCurrentDatabase();
     	String srv = dbCurr.getServer();	//Server name where this app is
     	
+    	
     	Document doc = dbCurr.createDocument();
     	
     	//Mapping fields from PersonDoc to Request
@@ -85,6 +86,7 @@ public class JavaAgent extends AgentBase {
     	doc.appendItemValue("reqEGID", personDoc.getItemValueString("EmployeeID"));
     	doc.appendItemValue("reqFullName", personDoc.getItemValueString("FullName"));
     	doc.appendItemValue("reqMailServer", personDoc.getItemValueString("MailServer"));
+    	doc.appendItemValue("mailPath", personDoc.getItemValueString("MailFile"));
     	
     	doc.appendItemValue("reqMail01", "");
     	doc.appendItemValue("reqMail02", "");
@@ -93,9 +95,9 @@ public class JavaAgent extends AgentBase {
     	doc.computeWithForm(false, false);
     	
     	if (!doc.save())
-    		System.out.println("CAN'T SAVE: " + personDoc.getItemValueString("EmployeeID"));
+    		System.out.println("CAN'T SAVE: " + personDoc.getItemValueString("FullName"));
     	else
-    		System.out.println("SAVED: " + personDoc.getItemValueString("EmployeeID"));
+    		System.out.println("SAVED: " + personDoc.getItemValueString("FullName"));
 
     }
     
@@ -108,13 +110,18 @@ public class JavaAgent extends AgentBase {
     	String srv = dbCurr.getServer();	//Server name where this app is
     	View requestsView = dbCurr.getView("RequestQueue");
     	
-    	System.out.println(srv);
+    	ReadProfileDocument pr = new ReadProfileDocument(s);
+    	Document profile = pr.getProfileDocument();
     	
+    	String nabServer = profile.getItemValueString("NABserver");
+    	
+    	System.out.println(nabServer);
+
     	Document doc = null;
     	Document docTmp = null;
-    	Database dbNAB = s.getDatabase(srv, "names.nsf");
+    	Database dbNAB = s.getDatabase(nabServer, "names.nsf");
     	System.out.println(dbNAB.getFileName());
-    	View vPeople = dbNAB.getView("(PeopleByServer)");
+    	View vPeople = dbNAB.getView("People");
     	
     	
     	// Full text search in the view. If finds something then returns the number of found elements.
@@ -124,15 +131,12 @@ public class JavaAgent extends AgentBase {
     	System.out.println(resultsFoundInNAB);
     	
     	if (resultsFoundInNAB!=0)
-    	{
-    		
+    	{    		
     		doc = vPeople.getFirstDocument();
     		while (doc!=null)
     		{
-    			if (doc.getItemValueString("MailServer").contains("Verse"))
-    			{
-    				createRequest(doc);
-    			}    		
+    			createRequest(doc);
+    			    		
     			docTmp = vPeople.getNextDocument(doc);
     			doc.recycle();
     			doc = docTmp;
@@ -152,7 +156,7 @@ public class JavaAgent extends AgentBase {
      */
     public String inputGUI()
     {
-    	String s = JOptionPane.showInputDialog("Provide value to search in view and create requests for found elements: ");
+    	String s = JOptionPane.showInputDialog("Provide common value to search in Domino Directory and create requests for found elements: ");
     	return s;
     }
     
@@ -160,10 +164,7 @@ public class JavaAgent extends AgentBase {
      * Only for showing the user prompt that he didn't provide any value to search.
      * Not evryone looks at the Java Debug Console. 
      */
-    public void outputGUI(String text)
-    {
-    	JOptionPane.showMessageDialog(null,text);
-    }
+
 }
 
 
@@ -174,9 +175,14 @@ public class JavaAgent extends AgentBase {
 
 
 
-</java></javaproject></code>
-<rundata processeddocs='0' exitcode='0'>
-<agentmodified><datetime dst='true'>20180710T122405,97+02</datetime></agentmodified></rundata>
-<item name='$JavaCompilerSource'><text>1.3</text></item>
-<item name='$JavaCompilerTarget'><text>1.2</text></item></agent>
-
+</java>
+      <sharedlibraryref name="CommonUtility"/>
+    </javaproject>
+  </code>
+  <item name="$JavaCompilerSource">
+    <text>1.3</text>
+  </item>
+  <item name="$JavaCompilerTarget">
+    <text>1.2</text>
+  </item>
+</agent>
