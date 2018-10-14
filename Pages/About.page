@@ -2,19 +2,104 @@
 <page xmlns="http://www.lotus.com/dxl" name="About" publicaccess="false" bgcolor="#00afda" renderpassthrough="true">
   <body>
     <richtext>
-      <pardef id="1"/>
-      <par def="1">
-        <picture width="252px" height="309px">
-          <imageref name="nsfDeleter_logo.png"/>
-        </picture>
-      </par>
+      <pardef id="1" leftmargin="1in" tabs="L0.5000in L1in L1.5000in L2in L2.5000in L3in L3.5000in L4in"/>
       <par def="1"/>
-      <par def="1">created by: Tomasz Wieszczura</par>
-      <par def="1">contact: Tomasz.Wieszczura@pl.ibm.com</par>
       <par def="1"/>
-      <par def="1">GitHub:</par>
-      <pardef id="2" leftmargin="1in" tabs="L0.5000in L1in L1.5000in L2in L2.5000in L3in L3.5000in L4in"/>
-      <par def="2">https://github.ibm.com/Tomasz-Wieszczura/NSF-Deleter</par>
+      <table cellbordercolor="gray" widthtype="fixedleft" refwidth="9.6319in">
+        <tablecolumn width="4.0910in"/>
+        <tablecolumn width="5.5410in"/>
+        <tablerow>
+          <tablecell borderwidth="0px 1px 0px 0px">
+            <pardef id="2" spaceafter="1.5" keepwithnext="true" keeptogether="true"/>
+            <par def="2">
+              <button width="2in" widthtype="maximum" maxlines="1" wraptext="true" edge="rounded" bgcolor="#f7f7f7" type="cancel">
+                <code event="click">
+                  <formula>@Command([CloseWindow])</formula>
+                </code>Close</button>
+            </par>
+            <pardef id="3" keepwithnext="true" keeptogether="true"/>
+            <par def="3"/>
+            <par def="3"/>
+            <par def="3">
+              <picture width="252px" height="309px">
+                <imageref name="nsfDeleter_logo.png"/>
+              </picture>
+            </par>
+            <par def="3"/>
+            <par def="3">created by: Tomasz Wieszczura</par>
+            <par def="3">contact: Tomasz.Wieszczura@pl.ibm.com</par>
+            <par def="3"/>
+            <par def="3">GitHub:</par>
+            <pardef id="4" tabs="L0.5000in L1in L1.5000in L2in L2.5000in L3in L3.5000in L4in" keepwithnext="true" keeptogether="true"/>
+            <par def="4">
+              <urllink showborder="false" href="https://github.ibm.com/Tomasz-Wieszczura/NSF-Deleter">
+                <run>
+                  <font color="system"/>https://github.ibm.com/Tomasz-Wieszczura/NSF-Deleter</run>
+              </urllink>
+            </par>
+          </tablecell>
+          <tablecell borderwidth="0px 0px 0px 1px">
+            <pardef id="5" leftmargin="0.1181in" keepwithnext="true" keeptogether="true"/>
+            <par def="5">HOW TO USE THIS APPLICATION?</par>
+            <par def="5"/>
+            <par def="5">
+              <run>
+                <font style="underline"/>CONFIGURATION</run>
+            </par>
+            <par def="5">Before you start, fulfil the configuration tab.</par>
+            <par def="5">- "Server with Domino Directory" - use in SCENARIO 1. Server where you can search for users' mailboxes. This can be one of cluster's node. Important: this should be the replica of cluster's nodes Domino Directory.</par>
+            <par def="5">- "Delete databases from single server" - name of the single instance server, non-clustered. Databases will be delete only from this one server.</par>
+            <par def="5">- "Delete from single server - YES/NO" - If you set YES, then deletion will perform only on server pointed in corresponding field. If you set NO, then deletion will perform on both cluster's nodes selected in Configuration</par>
+            <par def="5">- "Delete db from cluster 1" - name of the first cluster's node, if you want to deleted from clustered servers</par>
+            <par def="5">- "Delete db from cluster 2" - name of the first cluster's node, if you want to deleted from clustered servers</par>
+            <par def="5">-Default prefix for databases" - in case you are importing databases file name form the file and file does not contains path, only file names, you can set it globally here. If you leave empty, then the file path will be read from file, example: mail/qazwsx.nsf</par>
+            <par def="5"/>
+            <par def="5">All outputs and errors you can find by opening Java console form top menu Tools -&gt; Show java debug console.</par>
+            <par def="5"/>
+            <section>
+              <sectiontitle pardef="5" color="teal">
+                <font style="underline"/>
+                <text>SCENARIO 1: Search in Domino Directory</text>
+              </sectiontitle>
+              <par def="5">
+                <run>
+                  <font style="underline"/>SCENARIO 1: Search in Domino Directory</run>
+              </par>
+              <par def="5">Searching in Domino Directory is useful if you need to find databases/mailboxes for a users that has something in common: the same department code, the same mail server, the same mail path, the same surname of first name, the same location etc.</par>
+              <par def="5"/>
+              <par def="5">1. Click button "Search in Domino Directory" and provide key to search. Key can be anything. Searching in Domino Directory is make by FullTextSearch.</par>
+              <par def="5">2. In case you are going to delete databases from cluster's server, you should push the button Check replicas on server". Method will lookup to both cluster's node you specified in Configuration and check if datasbes exist on that nodes.</par>
+              <par def="5">3. If you check the existing in cluster's nodes, you can push the button "Delete databases"</par>
+            </section>
+            <par def="5"/>
+            <section>
+              <sectiontitle pardef="5" color="teal">
+                <font style="underline"/>
+                <text>SCENARIO 2: Import databases from file</text>
+              </sectiontitle>
+              <par def="5">
+                <run>
+                  <font style="underline"/>SCENARIO 2: Import databases from file</run>
+              </par>
+              <par def="5"/>
+              <par def="5">Text file with one database file name in row, for example:</par>
+              <par def="5">mail/qazwsx.nsf</par>
+              <par def="5">mail/trew.nsf</par>
+              <par def="5">...</par>
+              <par def="5"/>
+              <par def="5">If file name does not contains extension ".nsf", application will add it automatically.</par>
+              <par def="5"/>
+              <par def="5">1. In configuration set prefix/path for files. If empty, then it will read it from file.</par>
+              <par def="5">2. Push the button "Import from file", choose file.</par>
+              <par def="5">3. In case you are going to delete databases from cluster's server, you should push the button Check replicas on server". Method will lookup to both cluster's node you specified in Configuration and check if datasbes exist on that nodes.</par>
+            </section>
+            <par def="5"/>
+            <pardef id="6" keepwithnext="true" keeptogether="true"/>
+            <par def="6"/>
+          </tablecell>
+        </tablerow>
+      </table>
+      <par def="1"/>
     </richtext>
   </body>
 </page>

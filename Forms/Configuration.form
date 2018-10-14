@@ -259,7 +259,7 @@ Yg4BAIQAAAAAAAAAAAA=
           <tablecell>
             <par def="6">
               <run>
-                <font size="12pt" name="Arial" pitch="variable" truetype="true" familyid="20"/>Default prefix for mailboxes (path)</run>
+                <font size="12pt" name="Arial" pitch="variable" truetype="true" familyid="20"/>Default prefix for databases (path)</run>
             </par>
             <par def="6">
               <run>

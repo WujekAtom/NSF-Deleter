@@ -17,7 +17,7 @@
         <simpleaction action="runagent" agent="CheckClusterMailbox"/>
       </code>
     </action>
-    <action title="Delete mailboxes" icon="4">
+    <action title="Delete databases" icon="4">
       <code event="action">
         <simpleaction action="runagent" agent="ProcessQueue"/>
       </code>

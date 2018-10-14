@@ -13,7 +13,7 @@
       <formula>@Command([EditProfileDocument]; "Configuration")</formula>
     </code>
   </outlineentry>
-  <outlineentry label="ABOUT" type="namedelementlink" displayimage="false">
+  <outlineentry label="ABOUT" type="namedelementlink" targetframe="MainFrameset" displayimage="false">
     <namedelementlink type="page" name="About"/>
   </outlineentry>
 </outline>
