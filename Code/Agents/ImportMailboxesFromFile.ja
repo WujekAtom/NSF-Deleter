@@ -133,6 +133,8 @@ public class JavaAgent extends AgentBase {
     		doc.replaceItemValue("reqEGID", egidVector.get(i).toString());
     		doc.replaceItemValue("reqStatus", "Queue");
     		mailPath = egidVector.get(i).toString();
+    		
+    		// If file doesn't contains files extension, add it.
     		if (mailPath.contains(".nsf"))
     			doc.replaceItemValue("mailPath", pathPrefix.concat(egidVector.get(i).toString()));
     		else

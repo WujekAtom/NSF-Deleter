@@ -214,7 +214,11 @@ Yg4BAIQAAAAAAAAAAAA=
               </run>
               <run>
                 <font name="Arial" pitch="variable" truetype="true" familyid="20"/>
-                <field showdelimiters="false" type="text" kind="editable" name="reqStatus"/>
+                <field showdelimiters="false" type="text" kind="editable" name="reqStatus">
+                  <code event="defaultvalue">
+                    <formula>"Queue"</formula>
+                  </code>
+                </field>
               </run>
               <compositedata type="98" prevtype="65418" nexttype="222" afterparcount="7" containertype="65418" aftercontainercount="1" afterbegincount="4">
 Yg4BAIQAAAAAAAAAAAA=

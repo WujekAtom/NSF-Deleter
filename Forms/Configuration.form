@@ -302,8 +302,7 @@ Yg4BAIQAAAAAAAAAAAA=
           <tablecell>
             <par def="8">
               <run>
-                <font size="12pt" name="Arial" pitch="variable" truetype="true" familyid="20"/>
-              </run>
+                <font size="12pt" style="bold" name="Arial" pitch="variable" truetype="true" familyid="20" color="red"/>Leave empty if you provide path in file!</run>
             </par>
           </tablecell>
         </tablerow>

@@ -74,14 +74,9 @@ End Sub
 </lotusscript>
       </code>
     </action>
-    <action title="Delete single EGID" icon="126" hide="notes">
-      <code event="action">
-        <simpleaction action="runagent" agent="ProcessQueue"/>
-      </code>
-    </action>
-    <action title="Import all Verse users" icon="1" hide="notes">
-      <code event="action">
-        <simpleaction action="runagent" agent="ImportAllVerseUsers"/>
+    <action title="Add DB's request" icon="126">
+      <code event="click">
+        <formula>@Command([Compose];"";"Request")</formula>
       </code>
     </action>
     <action title="Process NON cluster" icon="83" hide="notes">
