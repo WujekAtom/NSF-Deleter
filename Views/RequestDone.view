@@ -7,25 +7,30 @@
     <actionbuttonstyle heighttype="background" bgcolor="#f0f0f0" displayborder="notesstyle"/>
     <font color="system"/>
     <border style="solid" width="0px 0px 1px" color="system"/>
-    <action title="1. Add department to queue" icon="20">
+    <action title="1. Add department to queue" icon="20" hide="notes">
       <code event="action">
         <simpleaction action="runagent" agent="CreateRequestsForDelete"/>
       </code>
     </action>
-    <action title="2. Check replicas on cluster" icon="111">
+    <action title="2. Check replicas on cluster" icon="111" hide="notes">
       <code event="action">
         <simpleaction action="runagent" agent="CheckClusterMailbox"/>
       </code>
     </action>
-    <action title="3. Process req / Delete mailboxes" icon="4">
+    <action title="3. Process req / Delete mailboxes" icon="4" hide="notes">
       <code event="action">
         <simpleaction action="runagent" agent="ProcessQueue"/>
       </code>
     </action>
     <action title="separator1" displaytype="menuseparator"/>
-    <action title="Delete single EGID" icon="126">
+    <action title="Delete single EGID" icon="126" hide="notes">
       <code event="action">
         <simpleaction action="runagent" agent="ProcessQueue"/>
+      </code>
+    </action>
+    <action title="Configuration">
+      <code event="click">
+        <formula>@Command([EditProfileDocument]; "Configuration")</formula>
       </code>
     </action>
   </actionbar>

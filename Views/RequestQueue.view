@@ -74,14 +74,9 @@ End Sub
 </lotusscript>
       </code>
     </action>
-    <action title="Add DB's request" icon="126">
+    <action title="Add single request" icon="126">
       <code event="click">
         <formula>@Command([Compose];"";"Request")</formula>
-      </code>
-    </action>
-    <action title="Process NON cluster" icon="83" hide="notes">
-      <code event="action">
-        <simpleaction action="runagent" agent="(ProcessSingleServerQueue)"/>
       </code>
     </action>
     <action title="Configuration">

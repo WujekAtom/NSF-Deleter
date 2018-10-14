@@ -15,14 +15,26 @@ public class JavaAgent extends AgentBase {
       try {
           Session session = getSession();
           AgentContext agentContext = session.getAgentContext();
-
+          ReadProfileDocument pr = new ReadProfileDocument(session);
+          Document profile = pr.getProfileDocument();
+          
+          int singleSrvDelete = Integer.parseInt(profile.getItemValueString("singleServerDelete"));
+          
           // (Your code goes here)
           //singleDelete();
           GUIprompt gui = new GUIprompt();
-          if (gui.promptWindow("Are you sure you want to DELETE databases from server?"))
-        	  processRequests();
+          
+          if (singleSrvDelete == 1)
+        	  if (gui.promptWindow("Deletion only from server " + profile.getItemValueString("deleteFromServer")+ " Are you sure?"))
+        		  processRequests();
+        	  else
+        		  System.out.println("Operation canceled");
           else
-        	  System.out.println("Operation canceled");
+        	  if (gui.promptWindow("Process deletion from both cluster servers?"))
+        		  processRequests();
+        	  else
+        		  System.out.println("Operation canceled");
+        	  
           //processSingleServerRequests();
          //testProcess();
           
@@ -40,59 +52,8 @@ public class JavaAgent extends AgentBase {
     /*
      * TEST one single deletion
      */
-    public void singleDelete() throws NotesException
-    {
-    	Session s = getSession();
-    	AgentContext agt = s.getAgentContext();
-    	Database db = agt.getCurrentDatabase();
-    	View view = db.getView("RequestQueue");
-    	
-    	String mail01srv = "SVEHMAIL01/SRV/EPCOS";
-    	String mail02srv = "SVEHMAIL02/SRV/EPCOS";
-    	
-    	Document docTmp = null;
-    	Document doc = view.getFirstDocument();
-    	
-    	Database dbMail01 = s.getDatabase(mail01srv, doc.getItemValueString("reqMail01"), false);
-    	Database dbMail02 = s.getDatabase(mail02srv, doc.getItemValueString("reqMail02"), false);
-    	
-    	System.out.println(doc.getItemValueString("reqFullName"));
-    	dbMail01.remove();
-    	dbMail02.remove();
-    	
-    	dbMail01.recycle();
-    	dbMail02.recycle();
-    	
-    	doc.recycle();
-    }
     
-    /*
-     * TEST method for reading database's profile document
-     */
-    public Document readProfile() throws NotesException
-    {
-    	Session s = getSession();
-    	AgentContext agt = s.getAgentContext();
-    	Database db = agt.getCurrentDatabase();
-    	
-    	Document profileDoc = db.getProfileDocument("Configuration", "");
-    	if (profileDoc.isProfile())
-    	{
-//    		System.out.println("Delete from server: " + profileDoc.getItemValueString("deleteFromServer"));
-//    		System.out.println("Selected cluster1? " + profileDoc.getItemValueString("cluster1delete"));
-//    		System.out.println("Selected cluster1? " + profileDoc.getItemValueString("prefix"));
-//    		int deleteCluster1 = Integer.parseInt(profileDoc.getItemValueString("cluster1delete"));
-//    		if (deleteCluster1 == 1)
-//    			System.out.println("jeden");
-    		return profileDoc;
-    	}
-    	
-    	else
-    		return null;
-    	
-    }
-    
-    
+         
     /*
      * Method check all requests document. it check if doc is in QUEUE state and if it is not selected to NOT PROCESS
      * TODO: add to window prompt info about parameter from profile
